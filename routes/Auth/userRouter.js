@@ -15,9 +15,21 @@ userRouter.post(
 
 userRouter.post(
   '/verify-code',
-  authorization,
+  authorization.verifyTokenUser,
   validation(userValidations.validateCode, 'body'),
-  userAuthController.verificationCode
+  userAuthController.validateCode
+);
+
+userRouter.get(
+  '/verify-code',
+  authorization.verifyTokenUser,
+  userAuthController.resendValidationCode
+);
+
+userRouter.post(
+  '/login',
+  validation(userValidations.login, 'body'),
+  userAuthController.login
 );
 
 module.exports = userRouter;

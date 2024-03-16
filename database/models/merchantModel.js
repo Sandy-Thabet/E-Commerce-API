@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const merchantSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: [true, 'First name can not be empty!'],
@@ -12,37 +12,37 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
+    required: [true, 'gender can not be empty!'],
     enum: ['male', 'female', 'ratherNotToSay'],
-    required: true,
   },
   email: {
     type: String,
-    required: [true, 'email can not be empty!'],
+    required: [true, 'Email can not be empty!'],
     unique: true,
   },
   password: {
     type: String,
-    required: [true, 'Password can not be empty!'],
+    required: [true, 'Password can not br empty!'],
     select: false,
   },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'blocked', 'pending'],
+    enum: ['pending', 'active', 'blocked', 'inactive'],
     default: 'pending',
   },
   validationCode: {
     type: String,
-    required: true,
+    required: [true],
   },
 });
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+merchantSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
   this.password = await bcrypt.hash(this.password, 12);
-
   next();
 });
 
-const User = mongoose.model('users', userSchema);
-
-module.exports = User;
+const Merchant = mongoose.model('merchants', merchantSchema);
+module.exports = Merchant;

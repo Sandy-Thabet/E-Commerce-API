@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const User = require('../../database/models/userModel');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {

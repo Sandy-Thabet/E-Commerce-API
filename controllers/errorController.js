@@ -15,7 +15,8 @@ const handleValidationError = (err) => {
 
 const handleJsonWebTokenError = (err) => {
   const error = err.name;
-  return new AppError(`Unauthorized: Invalid token: ${error}`, 401);
+  console.log(error);
+  return new AppError(`Unauthorized`, 401);
 };
 
 const sendError = (err, res) => {

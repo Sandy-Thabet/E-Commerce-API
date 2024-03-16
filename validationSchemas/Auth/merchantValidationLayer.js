@@ -11,8 +11,3 @@ exports.signUp = Joi.object({
 exports.validateCode = Joi.object({
   validationCode: Joi.string().length(6).required(),
 });
-
-exports.login = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-});
