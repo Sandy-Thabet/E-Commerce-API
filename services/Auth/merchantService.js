@@ -23,7 +23,7 @@ exports.signUp = async (merchantData, nationalData, nationalImage) => {
     });
 
     sendEmail({
-      email: newUser.email,
+      email: merchant.email,
       subject: 'Welcome to our E-Commerce Platform!',
       template: 'signup-validation-code', // Use only the template name without the file extension
       data: {
@@ -59,12 +59,13 @@ exports.resendValidationCode = async (merchantID) => {
     const newValidationCode = ValidationCode.generateCode();
     await Merchant.updateOne(merchant, { validationCode: newValidationCode });
 
-    sendEmail({
-      email: newUser.email,
-      subject: 'Welcome to our E-Commerce Platform!',
-      template: 'resend-verification-code', // Use only the template name without the file extension
+    // Pass the newValidationCode to the template
+    await sendEmail({
+      email: merchant.email,
+      subject: 'Re-Send Verification Code',
+      template: 'resend-verification-code',
       data: {
-        validationCode: newValidationCode,
+        newValidationCode: newValidationCode,
       },
     });
   } catch (err) {
@@ -122,7 +123,7 @@ exports.forgetPassword = async (email) => {
     await Merchant.updateOne(merchant, { validationCode: newValidationCode });
 
     sendEmail({
-      email: newUser.email,
+      email: merchant.email,
       subject: 'Welcome to our E-Commerce Platform!',
       template: 'reset-password-validation-code', // Use only the template name without the file extension
       data: {

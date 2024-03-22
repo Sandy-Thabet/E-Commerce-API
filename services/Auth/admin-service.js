@@ -50,18 +50,18 @@ exports.forgetPassword = async (email) => {
       throw new AppError('Email is not exist!', 400);
     }
 
-    const code = ValidationCode.generateCode();
+    const newValidationCode = ValidationCode.generateCode();
     await Admin.updateOne(admin, {
-      validationCode: code,
+      validationCode: newValidationCode,
       password: undefined,
     });
 
     sendEmail({
-      email: newUser.email,
+      email: admin.email,
       subject: 'Welcome to our E-Commerce Platform!',
       template: 'reset-password-validation-code', // Use only the template name without the file extension
       data: {
-        validationCode: code,
+        validationCode: newValidationCode,
       },
     });
   } catch (err) {

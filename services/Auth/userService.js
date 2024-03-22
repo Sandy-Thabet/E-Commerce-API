@@ -80,12 +80,12 @@ exports.resendValidationCode = async (userId) => {
       validationCode: newValidationCode,
     });
 
-    sendEmail({
-      email: newUser.email,
-      subject: 'Welcome to our E-Commerce Platform!',
-      template: 'resend-verification-code', // Use only the template name without the file extension
+    await sendEmail({
+      email: user.email,
+      subject: 'Re-Send Verification Code',
+      template: 'resend-verification-code',
       data: {
-        validationCode: newValidationCode,
+        newValidationCode: newValidationCode, // Pass the new validation code here
       },
     });
     return;
@@ -124,7 +124,7 @@ exports.forgetPassword = async (email) => {
     await User.updateOne(user, { validationCode: newValidationCode });
 
     sendEmail({
-      email: newUser.email,
+      email: user.email,
       subject: 'Welcome to our E-Commerce Platform!',
       template: 'reset-password-validation-code', // Use only the template name without the file extension
       data: {
