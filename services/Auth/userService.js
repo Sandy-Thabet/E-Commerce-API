@@ -17,11 +17,13 @@ exports.signUp = async (userData) => {
     });
 
     // Send email with validation code
-    const message = `Verify your account by ${validationCode}`;
-    await sendEmail({
+    sendEmail({
       email: newUser.email,
-      subject: 'signed up',
-      message,
+      subject: 'Welcome to our E-Commerce Platform!',
+      template: 'signup-validation-code', // Use only the template name without the file extension
+      data: {
+        validationCode: validationCode,
+      },
     });
 
     // generate tokens and return user with jwt tokens
@@ -46,7 +48,7 @@ exports.validateCode = async (userId, code) => {
     if (user && code === user.validationCode) {
       await User.updateOne(user, {
         status: 'active',
-        validationCode: null,
+        validationCode: undefined,
       });
 
       user.password = undefined;
@@ -78,11 +80,13 @@ exports.resendValidationCode = async (userId) => {
       validationCode: newValidationCode,
     });
 
-    const message = `Verify your account by ${newValidationCode}`;
-    await sendEmail({
-      email: user.email,
-      subject: 'Re-Send Verification Code',
-      message,
+    sendEmail({
+      email: newUser.email,
+      subject: 'Welcome to our E-Commerce Platform!',
+      template: 'resend-verification-code', // Use only the template name without the file extension
+      data: {
+        validationCode: newValidationCode,
+      },
     });
     return;
   } catch (err) {
@@ -104,6 +108,56 @@ exports.login = async (email, password) => {
       }
     }
     throw new AppError('Invalid email or password.', 401);
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.forgetPassword = async (email) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new AppError('Email is not exist.', 404);
+    }
+
+    const newValidationCode = ValidationCode.generateCode();
+    await User.updateOne(user, { validationCode: newValidationCode });
+
+    sendEmail({
+      email: newUser.email,
+      subject: 'Welcome to our E-Commerce Platform!',
+      template: 'reset-password-validation-code', // Use only the template name without the file extension
+      data: {
+        validationCode: newValidationCode,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.validateUserCode = async (email, code) => {
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user || code !== user.validationCode) {
+      throw new AppError('Invalid code!', 400);
+    }
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.setNewPassword = async (email, code, Password) => {
+  try {
+    const user = await this.validateUserCode(email, code);
+    const newPassword = await bcrypt.hash(Password, 12);
+    return await User.updateOne(user, {
+      password: newPassword,
+      validationCode: null,
+      // $unset: { validationCode: 1 },
+    });
   } catch (err) {
     throw err;
   }

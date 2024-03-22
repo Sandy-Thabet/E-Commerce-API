@@ -32,4 +32,22 @@ userRouter.post(
   userAuthController.login
 );
 
+userRouter.post(
+  '/forget-password',
+  validation(userValidations.checkUser),
+  userAuthController.forgetPassword
+);
+
+userRouter.post(
+  '/verify-reset-code',
+  validation(userValidations.validateUserCode),
+  userAuthController.validateUserCode
+);
+
+userRouter.post(
+  '/set-new-password',
+  validation(userValidations.setNewPassword),
+  userAuthController.setNewPassword
+);
+
 module.exports = userRouter;

@@ -27,12 +27,12 @@ const merchantSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'active', 'blocked', 'inactive'],
+    enum: ['pending', 'pendingAdminApproval', 'active', 'blocked', 'inactive'],
     default: 'pending',
   },
   validationCode: {
     type: String,
-    required: [true],
+    required: true,
   },
 });
 

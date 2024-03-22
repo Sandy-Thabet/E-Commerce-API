@@ -5,8 +5,12 @@ const mongoSanitize = require('express-mongo-sanitize');
 const morgan = require('morgan');
 const authRouter = require('./routes/Auth/router');
 const errorController = require('./controllers/errorController');
+const bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(helmet());
 

@@ -1,8 +1,8 @@
 const dotenv = require('dotenv');
+dotenv.config();
+
 const app = require('./app');
 const { connectMongoDB } = require('./database/db');
-
-dotenv.config();
 
 connectMongoDB().then(() => {
   console.log('DB connected 🚀');

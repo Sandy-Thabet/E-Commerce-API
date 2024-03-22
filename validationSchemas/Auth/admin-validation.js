@@ -1,27 +1,23 @@
 const Joi = require('joi');
 
-exports.signUp = Joi.object({
+exports.signup = Joi.object({
   firstName: Joi.string().min(3).max(10).required(),
   lastName: Joi.string().min(3).max(10).required(),
-  gender: Joi.string().valid('male', 'female', 'ratherNotToSay').required(),
+  gender: Joi.string().valid('male', 'female').required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(8).max(24).required(),
 });
 
-exports.validateCode = Joi.object({
-  validationCode: Joi.string().length(6).required(),
-});
-
 exports.login = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  password: Joi.string().min(8).max(24).required(),
 });
 
-exports.checkUser = Joi.object({
+exports.forgetPassword = Joi.object({
   email: Joi.string().email().required(),
 });
 
-exports.validateUserCode = Joi.object({
+exports.validateAdminCode = Joi.object({
   email: Joi.string().email().required(),
   validationCode: Joi.string().length(6).required(),
 });

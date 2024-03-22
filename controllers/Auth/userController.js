@@ -8,15 +8,6 @@ exports.signUp = catchAsync(async (req, res, next) => {
   return res.status(201).json(new SuccessResponse(user));
 });
 
-exports.validateCode = catchAsync(async (req, res, next) => {
-  const user = await userAuthService.validateCode(
-    req.user.id,
-    req.body.validationCode
-  );
-
-  return res.status(200).json(new SuccessResponse(user));
-});
-
 exports.resendValidationCode = catchAsync(async (req, res, next) => {
   await userAuthService.resendValidationCode(req.user.id);
 
@@ -27,6 +18,15 @@ exports.resendValidationCode = catchAsync(async (req, res, next) => {
   );
 });
 
+exports.validateCode = catchAsync(async (req, res, next) => {
+  const user = await userAuthService.validateCode(
+    req.user.id,
+    req.body.validationCode
+  );
+
+  return res.status(200).json(new SuccessResponse(user));
+});
+
 exports.login = catchAsync(async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -34,3 +34,33 @@ exports.login = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(new SuccessResponse(user));
 });
+
+exports.forgetPassword = catchAsync(async (req, res, next) => {
+  const email = req.body.email;
+
+  await userAuthService.forgetPassword(email);
+
+  return res.status(200).json(new SuccessResponse());
+});
+
+exports.validateUserCode = catchAsync(async (req, res, next) => {
+  const email = req.body.email;
+  const code = req.body.validationCode;
+
+  await userAuthService.validateUserCode(email, code);
+
+  return res.status(200).json(new SuccessResponse());
+});
+
+exports.setNewPassword = catchAsync(async (req, res, next) => {
+  const email = req.body.email;
+  const code = req.body.validationCode;
+  const password = req.body.password;
+
+  await userAuthService.setNewPassword(email, code, password);
+
+  const message = `Your password updated successfully.`;
+  return res.status(200).json(new SuccessResponse(message));
+});
+
+// crate middle for uploding photo
