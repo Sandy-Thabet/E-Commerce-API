@@ -6,15 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to our E-Commerce Platform!</title>
+    <style>
+        /* Center align the content */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Style for the container */
+        .container {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Welcome to our E-Commerce Platform!</h1>
-    <p>Thank you for signing up with us. To verify your account, please use the following validation code:</p>
-    <h2>Validation Code: <%= validationCode %></h2>
-    <p>Please enter this code in the provided field to complete your registration.</p>
-    <p>If you did not sign up for an account, please disregard this email.</p>
-    <p>Best regards,<br> The E-Commerce Platform Team</p>
+    <div class="container">
+        <h1>Welcome to our E-Commerce Platform!</h1>
+        <p>Thank you for signing up with us. To verify your account, please use the following validation code:</p>
+        <h2>Validation Code: <%= validationCode %></h2>
+        <p>Please enter this code in the provided field to complete your registration.</p>
+        <p>If you did not sign up for an account, please disregard this email.</p>
+        <p>Best regards,<br> The E-Commerce Platform Team</p>
+    </div>
 </body>
 
 </html>
