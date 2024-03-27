@@ -98,6 +98,10 @@ exports.login = async (email, password) => {
   try {
     const currentUser = await User.findOne({ email }).select('+password');
 
+    if (!currentUser) {
+      throw new AppError('Unauthorized!', 401);
+    }
+
     if (currentUser) {
       const pass = await bcrypt.compare(password, currentUser.password);
       currentUser.password = undefined;
@@ -158,6 +162,55 @@ exports.setNewPassword = async (email, code, Password) => {
       validationCode: null,
       // $unset: { validationCode: 1 },
     });
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getMe = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+
+    // if (!user) {
+    //   throw new AppError('Unauthorized!', 401);
+    // }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateMe = async (userId, data) => {
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    let newPassword;
+    if (data.password) {
+      newPassword = await bcrypt.hash(data.password, 12);
+    }
+
+    const updateData = {};
+    if (data.firstName) updateData.firstName = data.firstName;
+    if (data.lastName) updateData.lastName = data.lastName;
+    if (data.gender) updateData.gender = data.gender;
+    if (newPassword) updateData.password = newPassword;
+
+    const newUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
+
+    if (!newUser) {
+      throw new Error('Failed to update user');
+    }
+
+    const token = await sharedAuthService.createToken(newUser);
+
+    return { newUser, token };
   } catch (err) {
     throw err;
   }

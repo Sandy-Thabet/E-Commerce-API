@@ -23,9 +23,11 @@ const adminSchema = mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password can not be empty!'],
+    select: false,
   },
   validationCode: {
     type: String,
+    select: false,
   },
 });
 

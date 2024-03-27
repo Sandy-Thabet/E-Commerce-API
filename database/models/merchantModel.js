@@ -33,6 +33,7 @@ const merchantSchema = new mongoose.Schema({
   validationCode: {
     type: String,
     required: true,
+    // select: false,
   },
 });
 

@@ -63,4 +63,17 @@ exports.setNewPassword = catchAsync(async (req, res, next) => {
   return res.status(200).json(new SuccessResponse(message));
 });
 
-// crate middle for uploding photo
+exports.getMe = catchAsync(async (req, res, next) => {
+  const user = await userAuthService.getMe(req.user.id);
+
+  return res.status(200).json(new SuccessResponse(user));
+});
+
+exports.updateMe = catchAsync(async (req, res, next) => {
+  const { firstName, lastName, gender, password } = req.body;
+  const data = { firstName, lastName, gender, password };
+
+  const user = await userAuthService.updateMe(req.user.id, data);
+
+  return res.status(200).json(new SuccessResponse(user));
+});

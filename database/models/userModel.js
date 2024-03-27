@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
   validationCode: {
     type: String,
     required: true,
+    select: false,
   },
 });
 
