@@ -1,17 +1,17 @@
 const express = require('express');
 const validationMiddlewares = require('../../middlewares/validateSchema');
-const productController = require('../../controllers/Products/product-controller');
+const productController = require('../../controllers/Products/merchant-product-controller');
 const authorization = require('../../middlewares/authorization');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
 const productValidation = require('../../validationSchemas/Products/product-validation');
 
-const productRouter = express.Router();
+const merchantProductRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
 
 // #Merchant
 
 // create product
-productRouter.post(
+merchantProductRouter.post(
   '/create-product',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
@@ -20,7 +20,7 @@ productRouter.post(
 );
 
 // update product
-productRouter.patch(
+merchantProductRouter.patch(
   '/update-:id',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
@@ -29,7 +29,7 @@ productRouter.patch(
 );
 
 // get product
-productRouter.get(
+merchantProductRouter.get(
   '/product-:id',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
@@ -37,39 +37,31 @@ productRouter.get(
 );
 
 // get all products
-productRouter.get(
-  '/products',
+merchantProductRouter.get(
+  '/my-products',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
-  productController.getAllProducts
+  productController.getAllMyProducts
 );
 
 // delete product
-productRouter.get(
+merchantProductRouter.get(
   '/delete-product/:id',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
   productController.deleteProduct
 );
 
-// block product
-productRouter.get(
-  '/products/block/:id',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  productController.blockProduct
-);
-
 // get active products
-productRouter.get(
-  '/products/active',
+merchantProductRouter.get(
+  '/products/active/',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
   productController.getActiveProducts
 );
 
 // get pending products
-productRouter.get(
+merchantProductRouter.get(
   '/products/pendingAdminApproval',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
@@ -77,16 +69,11 @@ productRouter.get(
 );
 
 // get blocked products
-productRouter.get(
+merchantProductRouter.get(
   '/products/blocked',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
   productController.getBlockedProducts
 );
 
-// #Admins
-
-// approve product
-productRouter.get('');
-
-module.exports = productRouter;
+module.exports = merchantProductRouter;

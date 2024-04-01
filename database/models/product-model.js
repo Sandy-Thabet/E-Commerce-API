@@ -5,6 +5,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'name can not be empty!'],
   },
+  status: {
+    type: String,
+    enum: ['pendingAdminApproval', 'active', 'blocked', 'inactive'],
+    default: 'pendingAdminApproval',
+  },
   description: {
     type: String,
     required: [true, 'description can not be empty!'],
@@ -15,17 +20,12 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: 'categories',
     required: true,
   },
   merchant: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Merchant',
-  },
-  status: {
-    type: String,
-    enum: ['pendingAdminApproval', 'active', 'blocked', 'inactive'],
-    default: 'pendingAdminApproval',
+    ref: 'merchants',
   },
 });
 

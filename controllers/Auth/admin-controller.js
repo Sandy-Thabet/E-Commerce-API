@@ -60,13 +60,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 //
-exports.createCategory = catchAsync(async (req, res, next) => {
-  const { name } = req.body;
-
-  const category = await adminAuthService.createCategory(req.admin.id, name);
-
-  return res.status(201).json(new SuccessResponse(category));
-});
 
 // Users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
@@ -122,7 +115,24 @@ exports.approveMerchant = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllMerchants = catchAsync(async (req, res, next) => {
-  const merchants = await adminAuthService.getAllMerchants();
+  const { firstName, lastName, status, email, gender, fullName, national_ID } =
+    req.query;
+  const filter = {
+    firstName,
+    lastName,
+    status,
+    email,
+    gender,
+    fullName,
+    national_ID,
+  };
+
+  const merchants = await adminAuthService.getAllMerchants(
+    filter,
+    req.query.page,
+    req.query.size,
+    req.query.sort
+  );
 
   return res
     .status(200)
@@ -135,23 +145,23 @@ exports.getMerchant = catchAsync(async (req, res, next) => {
   return res.status(200).json(new SuccessResponse({ merchant }));
 });
 
-exports.getPendingMerchants = catchAsync(async (req, res, next) => {
-  const merchants = await adminAuthService.getPendingMerchants();
+// exports.getPendingMerchants = catchAsync(async (req, res, next) => {
+//   const merchants = await adminAuthService.getPendingMerchants();
 
-  return res.status(200).json(new SuccessResponse(merchants));
-});
+//   return res.status(200).json(new SuccessResponse(merchants));
+// });
 
-exports.getPendingApprovalMerchants = catchAsync(async (req, res, next) => {
-  const merchants = await adminAuthService.getPendingApprovalMerchants();
+// exports.getPendingApprovalMerchants = catchAsync(async (req, res, next) => {
+//   const merchants = await adminAuthService.getPendingApprovalMerchants();
 
-  return res.status(200).json(new SuccessResponse(merchants));
-});
+//   return res.status(200).json(new SuccessResponse(merchants));
+// });
 
-exports.getActiveMerchant = catchAsync(async (req, res, next) => {
-  const merchants = await adminAuthService.getActiveMerchant();
+// exports.getActiveMerchant = catchAsync(async (req, res, next) => {
+//   const merchants = await adminAuthService.getActiveMerchant();
 
-  return res.status(200).json(new SuccessResponse(merchants));
-});
+//   return res.status(200).json(new SuccessResponse(merchants));
+// });
 
 exports.blockMerchant = catchAsync(async (req, res, status) => {
   const merchant = await adminAuthService.blockMerchant(req.params.id);

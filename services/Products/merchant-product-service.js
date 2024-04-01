@@ -32,7 +32,7 @@ exports.updateProduct = async (productId, data, merchantID) => {
       throw new AppError('no product found by this id.', 404);
     }
 
-    //! can merchant update pending products ?
+    //! can merchant update pending products ? true
     if (product.status === 'pendingAdminApproval') {
       throw new AppError('can not update pending products');
     }
@@ -67,7 +67,7 @@ exports.getProduct = async (productId) => {
   }
 };
 
-exports.getAllProducts = async (merchantId) => {
+exports.getAllMyProducts = async (merchantId) => {
   try {
     return await Product.find({ merchant: merchantId });
   } catch (err) {
@@ -83,7 +83,11 @@ exports.deleteProduct = async (productId, merchantId) => {
     if (merchant.toString() !== merchantId) {
       throw new AppError('You are not authorized to delete this product.', 403);
     }
-    if (!product || product.status === ('blocked' || 'inactive')) {
+    if (
+      !product ||
+      product.status === 'blocked' ||
+      product.status === 'inactive'
+    ) {
       throw new AppError('No product found by this id.', 404);
     }
 
@@ -108,7 +112,7 @@ exports.blockProduct = async (productId, merchantId) => {
     if (
       !product ||
       product.status === 'blocked' ||
-      product.status === 'inactive' //! do this for all (product.status === ('blocked' || 'inactive'))
+      product.status === 'inactive'
     ) {
       throw new AppError('No product found by this id.', 404);
     }

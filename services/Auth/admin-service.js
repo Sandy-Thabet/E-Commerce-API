@@ -5,7 +5,6 @@ const ValidationCode = require('../../utils/validationCode');
 const sharedAuthService = require('./sharedService');
 const bcrypt = require('bcrypt');
 const sendEmail = require('../../utils/emails');
-const categoryRepository = require('../../database/repositories/category-repository');
 const User = require('../../database/models/userModel');
 const Merchant = require('../../database/models/merchantModel');
 const MerchantNationalData = require('../../database/models/merchant-national-data-model');
@@ -149,13 +148,6 @@ exports.updateMe = async (adminId, data) => {
   }
 };
 
-exports.createCategory = async (adminId, name) => {
-  const admin = await Admin.findById(adminId);
-
-  const category = await categoryRepository.createCategory({ name });
-  return category;
-};
-
 exports.getAllUsers = async () => {
   try {
     return await User.find();
@@ -265,9 +257,24 @@ exports.approveMerchant = async (merchantId) => {
   }
 };
 
-exports.getAllMerchants = async () => {
+exports.getAllMerchants = async (filter, page, size, sort) => {
   try {
-    return await Merchant.find();
+    console.log('Filter...', filter);
+
+    const query = {};
+
+    const { ...otherFilters } = filter;
+    Object.entries(otherFilters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        query[key] = value;
+      }
+    });
+    console.log('Query:', query);
+
+    return await Merchant.find(query)
+      .sort(sort)
+      .limit(size)
+      .skip((page - 1) * size);
   } catch (err) {
     throw err;
   }
@@ -286,36 +293,36 @@ exports.getMerchant = async (id) => {
   }
 };
 
-//! return validationCode
-//(we can't put in model {select:false } it makes a pug in another function)
-exports.getPendingMerchants = async () => {
-  try {
-    // const merchant = await Merchant.find();
-    // merchant.validationCode = undefined;
+// //! return validationCode
+// //(we can't put in model {select:false } it makes a pug in another function)
+// exports.getPendingMerchants = async () => {
+//   try {
+//     // const merchant = await Merchant.find();
+//     // merchant.validationCode = undefined;
 
-    return await Merchant.find({ status: 'pending' });
-  } catch (err) {
-    throw err;
-  }
-};
+//     return await Merchant.find({ status: 'pending' });
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
-//! return validationCode
-exports.getPendingApprovalMerchants = async () => {
-  try {
-    return await Merchant.find({ status: 'pendingAdminApproval' });
-  } catch (err) {
-    throw err;
-  }
-};
+// //! return validationCode
+// exports.getPendingApprovalMerchants = async () => {
+//   try {
+//     return await Merchant.find({ status: 'pendingAdminApproval' });
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
-//! return validationCode
-exports.getActiveMerchant = async () => {
-  try {
-    return await Merchant.find({ status: 'active' });
-  } catch (err) {
-    throw err;
-  }
-};
+// //! return validationCode
+// exports.getActiveMerchant = async () => {
+//   try {
+//     return await Merchant.find({ status: 'active' });
+//   } catch (err) {
+//     throw err;
+//   }
+// };
 
 exports.blockMerchant = async (id) => {
   try {

@@ -4,7 +4,6 @@ const adminValidation = require('../../validationSchemas/Auth/admin-validation')
 const adminAuthController = require('../../controllers/Auth/admin-controller');
 const authorization = require('../../middlewares/authorization');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
-const categoryValidation = require('../../validationSchemas/Categories/category-validation');
 
 const adminRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
@@ -59,17 +58,6 @@ adminRouter.patch(
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.updateMe
-);
-
-// #Products
-
-// create category
-adminRouter.post(
-  '/create-category',
-  validation(categoryValidation.createCategory),
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.createCategory
 );
 
 // #Managment
@@ -153,38 +141,37 @@ adminRouter.get(
   adminAuthController.getMerchant
 );
 
-// get pending merchants
-adminRouter.get(
-  '/pending-merchants',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getPendingMerchants
-);
+// // get pending merchants
+// adminRouter.get(
+//   '/pending-merchants',
+//   authorization.verifyTokenAdmin,
+//   accessMiddleware('admin'),
+//   adminAuthController.getPendingMerchants
+// );
 
-adminRouter.get(
-  '/pending-approval-merchants',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getPendingApprovalMerchants
-);
+// adminRouter.get(
+//   '/pending-approval-merchants',
+//   authorization.verifyTokenAdmin,
+//   accessMiddleware('admin'),
+//   adminAuthController.getPendingApprovalMerchants
+// );
 
-adminRouter.get(
-  '/active-merchants',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getActiveMerchant
-);
+// adminRouter.get(
+//   '/active-merchants',
+//   authorization.verifyTokenAdmin,
+//   accessMiddleware('admin'),
+//   adminAuthController.getActiveMerchant
+// );
 
-adminRouter.get(
-  //!
-  '/:id/block-merchant',
+adminRouter.patch(
+  '/merchant/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.blockMerchant
 );
 
-adminRouter.get(
-  '/:id/delete-merchant',
+adminRouter.delete(
+  '/merchant/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.deleteMerchant
