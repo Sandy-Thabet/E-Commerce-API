@@ -259,8 +259,6 @@ exports.approveMerchant = async (merchantId) => {
 
 exports.getAllMerchants = async (filter, page, size, sort) => {
   try {
-    console.log('Filter...', filter);
-
     const query = {};
 
     const { ...otherFilters } = filter;
@@ -269,7 +267,6 @@ exports.getAllMerchants = async (filter, page, size, sort) => {
         query[key] = value;
       }
     });
-    console.log('Query:', query);
 
     return await Merchant.find(query)
       .sort(sort)

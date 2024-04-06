@@ -1,23 +1,24 @@
 const express = require('express');
-const userAuthController = require('../../controllers/Auth/userController');
+const userAuthController = require('../../controllers/Auth/user-controller');
 const validationMiddlewares = require('../../middlewares/validateSchema');
 const userValidations = require('../../validationSchemas/Auth/userValidationLayer');
 const authorization = require('../../middlewares/authorization');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
-const User = require('../../database/models/userModel');
+const { uploadUserImage } = require('../../middlewares/uploader');
 
-const userRouter = express.Router();
+const userAuthRouter = express.Router();
 const validation = validationMiddlewares.validateSchema; //Delegate
 
 // signup
-userRouter.post(
+userAuthRouter.post(
   '/signup',
+  uploadUserImage.single('profile_Photo'),
   validation(userValidations.signUp, 'body'),
   userAuthController.signUp
 );
 
 // verify validation code
-userRouter.post(
+userAuthRouter.post(
   '/verify-code',
   authorization.verifyTokenUser,
   validation(userValidations.validateCode, 'body'),
@@ -25,51 +26,51 @@ userRouter.post(
 );
 
 // resend validation code
-userRouter.get(
+userAuthRouter.get(
   '/verify-code',
   authorization.verifyTokenUser,
   userAuthController.resendValidationCode
 );
 
 // login
-userRouter.post(
+userAuthRouter.post(
   '/login',
   validation(userValidations.login, 'body'),
   userAuthController.login
 );
 
 // forget password 3 APIs
-userRouter.post(
+userAuthRouter.post(
   '/forget-password',
   validation(userValidations.checkUser),
   userAuthController.forgetPassword
 );
 
-userRouter.post(
+userAuthRouter.post(
   '/verify-reset-code',
   validation(userValidations.validateUserCode),
   userAuthController.validateUserCode
 );
 
-userRouter.post(
+userAuthRouter.post(
   '/set-new-password',
   validation(userValidations.setNewPassword),
   userAuthController.setNewPassword
 );
 
 // view profile
-userRouter.get(
+userAuthRouter.get(
   '/me',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
   userAuthController.getMe
 );
 
-userRouter.patch(
+userAuthRouter.patch(
   '/update-me',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
   userAuthController.updateMe
 );
 
-module.exports = userRouter;
+module.exports = userAuthRouter;

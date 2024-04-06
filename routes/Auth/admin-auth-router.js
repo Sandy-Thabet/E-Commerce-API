@@ -5,46 +5,46 @@ const adminAuthController = require('../../controllers/Auth/admin-controller');
 const authorization = require('../../middlewares/authorization');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
 
-const adminRouter = express.Router();
+const adminAuthRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
 
 // #Auth
 
 // signup
-adminRouter.post(
+adminAuthRouter.post(
   '/signup',
   validation(adminValidation.signup, 'body'),
   adminAuthController.signup
 );
 
 // login
-adminRouter.post(
+adminAuthRouter.post(
   '/login',
   validation(adminValidation.login),
   adminAuthController.login
 );
 
 // forget password 3 APIs
-adminRouter.post(
+adminAuthRouter.post(
   '/forget-password',
   validation(adminValidation.forgetPassword),
   adminAuthController.forgetPassword
 );
 
-adminRouter.post(
+adminAuthRouter.post(
   '/verify-reset-code',
   validation(adminValidation.validateAdminCode),
   adminAuthController.validateAdminCode
 );
 
-adminRouter.post(
+adminAuthRouter.post(
   '/set-new-password',
   validation(adminValidation.setNewPassword),
   adminAuthController.setNewPassword
 );
 
 // view profile
-adminRouter.get(
+adminAuthRouter.get(
   '/me',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -52,7 +52,7 @@ adminRouter.get(
 );
 
 // update profile
-adminRouter.patch(
+adminAuthRouter.patch(
   '/update-me',
   validation(adminValidation.updateMe),
   authorization.verifyTokenAdmin,
@@ -65,7 +65,7 @@ adminRouter.patch(
 /* User */
 
 // get all users
-adminRouter.get(
+adminAuthRouter.get(
   '/users',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -73,42 +73,42 @@ adminRouter.get(
 );
 
 // get user
-adminRouter.get(
+adminAuthRouter.get(
   '/user/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.getUser
 );
 
-adminRouter.get(
+adminAuthRouter.get(
   '/pending-users',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.getPendingUsers
 );
 
-adminRouter.get(
+adminAuthRouter.get(
   '/active-users',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.getActiveUsers
 );
 
-adminRouter.get(
+adminAuthRouter.get(
   '/blocked-users',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.getBlockedUsers
 );
 
-adminRouter.get(
+adminAuthRouter.get(
   '/:id/block-user',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.blockUser
 );
 
-adminRouter.get(
+adminAuthRouter.get(
   '/:id/delete-user',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -118,7 +118,7 @@ adminRouter.get(
 /* Merchant */
 
 // approve merchant
-adminRouter.get(
+adminAuthRouter.get(
   '/approve/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -126,7 +126,7 @@ adminRouter.get(
 );
 
 // get all merchants
-adminRouter.get(
+adminAuthRouter.get(
   '/merchants',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -134,7 +134,7 @@ adminRouter.get(
 );
 
 //get merchant
-adminRouter.get(
+adminAuthRouter.get(
   '/merchant/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -142,39 +142,39 @@ adminRouter.get(
 );
 
 // // get pending merchants
-// adminRouter.get(
+// adminAuthRouter.get(
 //   '/pending-merchants',
 //   authorization.verifyTokenAdmin,
 //   accessMiddleware('admin'),
 //   adminAuthController.getPendingMerchants
 // );
 
-// adminRouter.get(
+// adminAuthRouter.get(
 //   '/pending-approval-merchants',
 //   authorization.verifyTokenAdmin,
 //   accessMiddleware('admin'),
 //   adminAuthController.getPendingApprovalMerchants
 // );
 
-// adminRouter.get(
+// adminAuthRouter.get(
 //   '/active-merchants',
 //   authorization.verifyTokenAdmin,
 //   accessMiddleware('admin'),
 //   adminAuthController.getActiveMerchant
 // );
 
-adminRouter.patch(
+adminAuthRouter.patch(
   '/merchant/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.blockMerchant
 );
 
-adminRouter.delete(
+adminAuthRouter.delete(
   '/merchant/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.deleteMerchant
 );
 
-module.exports = adminRouter;
+module.exports = adminAuthRouter;

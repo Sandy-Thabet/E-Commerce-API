@@ -1,9 +1,39 @@
 const multer = require('multer');
 const AppError = require('../utils/appError');
 
-const multerStorage = multer.diskStorage({
+const multerStorageMerchant = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `${__dirname}/../utils/media/`);
+    cb(null, `${__dirname}/../utils/media/merchant-national-data`);
+  },
+  filename: (res, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `${Date.now()}-${ext}`);
+  },
+});
+
+const multerStorageUser = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, `${__dirname}/../utils/media/user-images`);
+  },
+  filename: (res, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `${Date.now()}-${ext}`);
+  },
+});
+
+const multerStorageAdmin = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, `${__dirname}/../utils/media/admin-images`);
+  },
+  filename: (res, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `${Date.now()}-${ext}`);
+  },
+});
+
+const multerStorageProduct = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, `${__dirname}/../utils/media/product-images`);
   },
   filename: (res, file, cb) => {
     const ext = file.mimetype.split('/')[1];
@@ -19,9 +49,22 @@ const multerFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
-  storage: multerStorage,
+exports.uploadNationalImage = multer({
+  storage: multerStorageMerchant,
   fileFilter: multerFilter,
 });
 
-exports.uploadImage = upload;
+exports.uploadProductImage = multer({
+  storage: multerStorageProduct,
+  fileFilter: multerFilter,
+});
+
+exports.uploadAdminImage = multer({
+  storage: multerStorageAdmin,
+  fileFilter: multerFilter,
+});
+
+exports.uploadUserImage = multer({
+  storage: multerStorageUser,
+  fileFilter: multerFilter,
+});

@@ -3,7 +3,9 @@ const helmet = require('helmet');
 const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const morgan = require('morgan');
-const authRouter = require('./routes/Auth/router');
+const usersRouter = require('./routes/main-routers/users-router');
+const merchantsRouter = require('./routes/main-routers/merchants-router');
+const adminsRouter = require('./routes/main-routers/admins-router');
 const errorController = require('./controllers/errorController');
 const bodyParser = require('body-parser');
 
@@ -32,7 +34,9 @@ const mainRouter = express.Router();
 app.use('/api/v1', mainRouter);
 
 // After finding /api/v1
-mainRouter.use('/auth', authRouter);
+mainRouter.use('/users', usersRouter);
+mainRouter.use('/merchants', merchantsRouter);
+mainRouter.use('/admins', adminsRouter);
 
 app.use('*', (req, res, next) => {
   return res.status(404).json({

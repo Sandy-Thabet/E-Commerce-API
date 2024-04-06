@@ -10,6 +10,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Last name can not be empty!'],
   },
+  profile_Photo: {
+    type: String,
+  },
   gender: {
     type: String,
     enum: ['male', 'female', 'ratherNotToSay'],

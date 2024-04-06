@@ -4,6 +4,7 @@ const productController = require('../../controllers/Products/merchant-product-c
 const authorization = require('../../middlewares/authorization');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
 const productValidation = require('../../validationSchemas/Products/product-validation');
+const { uploadProductImage } = require('../../middlewares/uploader');
 
 const merchantProductRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
@@ -12,9 +13,10 @@ const validation = validationMiddlewares.validateSchema;
 
 // create product
 merchantProductRouter.post(
-  '/create-product',
+  '/product',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
+  uploadProductImage.array('product_Image', 10),
   validation(productValidation.createProduct),
   productController.createProduct
 );

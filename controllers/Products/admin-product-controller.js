@@ -51,31 +51,3 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     })
   );
 });
-
-// exports.getMerchantActiveProducts = catchAsync(async (req, res, next) => {
-//   const products = await adminProductService.getMerchantActiveProducts(
-//     req.params.id
-//   );
-//   const merchant = await getMerchant(req.params.id);
-
-//   return res.status(200).json(
-//     new SuccessResponse({
-//       merchant: merchant.merchant,
-//       results: products.length,
-//       products,
-//     })
-//   );
-// });
-
-// exports.getAllActiveProducts = catchAsync(async (req, res, next) => {
-//   const products = await adminProductService.getAllActiveProducts();
-//   console.log(products);
-//   console.log(req.params);
-
-//   return res.status(200).json(
-//     new SuccessResponse({
-//       results: products.length,
-//       products,
-//     })
-//   );
-// });

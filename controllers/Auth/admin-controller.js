@@ -61,7 +61,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
 //
 
-// Users
+// Users ----
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await adminAuthService.getAllUsers();
 
@@ -107,7 +107,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   return res.status(204).json(new SuccessResponse());
 });
 
-// Merchants
+// Merchants ----
 exports.approveMerchant = catchAsync(async (req, res, next) => {
   const merchant = await adminAuthService.approveMerchant(req.params.id);
 

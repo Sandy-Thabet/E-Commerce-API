@@ -61,8 +61,6 @@ exports.getMerchantProducts = async (merchantId) => {
 
 exports.getAllProducts = async (filter, page, size, sort) => {
   try {
-    console.log('Filter...', filter);
-
     const query = {};
 
     // Extract price_from and price_to from filter if available
@@ -79,8 +77,6 @@ exports.getAllProducts = async (filter, page, size, sort) => {
     if (price_from && price_to) {
       query.price = { $gte: parseInt(price_from), $lte: parseInt(price_to) };
     }
-
-    console.log('Query:', query);
 
     const products = await Product.find(query)
       .sort(sort)

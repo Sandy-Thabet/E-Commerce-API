@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'name can not be empty!'],
   },
+  product_Image: {
+    type: String,
+    // required: true,
+  },
   status: {
     type: String,
     enum: ['pendingAdminApproval', 'active', 'blocked', 'inactive'],

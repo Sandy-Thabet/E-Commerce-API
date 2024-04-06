@@ -6,14 +6,14 @@ const productController = require('../../controllers/Products/user-product-contr
 const userProductRouter = express.Router();
 
 userProductRouter.get(
-  '/products',
+  '/',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
   productController.getAllProducts
 );
 
 userProductRouter.get(
-  '/product/:id',
+  '/:id',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
   productController.getProduct

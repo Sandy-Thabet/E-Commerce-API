@@ -98,7 +98,11 @@ exports.login = async (email, password) => {
   try {
     const currentUser = await User.findOne({ email }).select('+password');
 
-    if (!currentUser) {
+    if (
+      !currentUser ||
+      currentUser.status === 'inactive' ||
+      currentUser.status === 'blocked'
+    ) {
       throw new AppError('Unauthorized!', 401);
     }
 

@@ -19,8 +19,6 @@ exports.getAllProducts = async (filter, page, size, sort) => {
 
     query.status = 'active';
 
-    console.log('Query:', query);
-
     const products = await Product.find(query)
       .sort(sort)
       .limit(size)
@@ -43,7 +41,7 @@ exports.getProduct = async (productId) => {
       .populate({ path: 'merchant', select: 'firstName lastName' })
       .select('-__v');
 
-    if (product.status !== 'active') {
+    if (!product || product.status !== 'active') {
       throw new AppError('No product found by this id.', 404);
     }
     product.status = undefined;

@@ -1,28 +1,28 @@
 const express = require('express');
 const validationMiddlewares = require('../../middlewares/validateSchema');
 const merchantValidation = require('../../validationSchemas/Auth/merchantValidationLayer');
-const merchantAuthController = require('../../controllers/Auth/merchantController');
+const merchantAuthController = require('../../controllers/Auth/merchant-controller');
 const authorization = require('../../middlewares/authorization');
 const MerchantNationalDataValidatin = require('../../validationSchemas/Auth/merchant-national-data-validation');
 const Uploader = require('../../middlewares/uploader');
 const { accessMiddleware } = require('../../middlewares/access-middleware');
 
-const merchantRouter = express.Router();
+const merchantAuthRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
 
 // #Auth
 
 // signup
-merchantRouter.post(
+merchantAuthRouter.post(
   '/signup',
-  Uploader.uploadImage.single('national_ID_Image'),
   validation(merchantValidation.signUp, 'body'),
   validation(MerchantNationalDataValidatin.merchantNationalData),
+  Uploader.uploadNationalImage.single('national_ID_Image'),
   merchantAuthController.signup
 );
 
 // verify validation code
-merchantRouter.post(
+merchantAuthRouter.post(
   '/verify-code',
   authorization.verifyTokenMerchant,
   // accessMiddleware.accessMiddleware('merchant', ['pending']),
@@ -31,40 +31,40 @@ merchantRouter.post(
 );
 
 // resend validation code
-merchantRouter.get(
+merchantAuthRouter.get(
   '/verify-code',
   authorization.verifyTokenMerchant,
   merchantAuthController.resendValidationCode
 );
 
 // login
-merchantRouter.post(
+merchantAuthRouter.post(
   '/login',
   validation(merchantValidation.login),
   merchantAuthController.login
 );
 
 // forget password 3 APIs
-merchantRouter.post(
+merchantAuthRouter.post(
   '/forget-password',
   validation(merchantValidation.checkMerchant),
   merchantAuthController.forgetPassword
 );
 
-merchantRouter.post(
+merchantAuthRouter.post(
   '/verify-reset-code',
   validation(merchantValidation.validateMerchantCode),
   merchantAuthController.validateMerchantCode
 );
 
-merchantRouter.post(
+merchantAuthRouter.post(
   '/set-new-password',
   validation(merchantValidation.setNewPassword),
   merchantAuthController.setNewPassword
 );
 
 // view profile
-merchantRouter.get(
+merchantAuthRouter.get(
   '/me',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active', 'pending']),
@@ -72,7 +72,7 @@ merchantRouter.get(
 );
 
 // update profile
-merchantRouter.patch(
+merchantAuthRouter.patch(
   '/update-me',
   validation(merchantValidation.updateMe),
   authorization.verifyTokenMerchant,
@@ -80,4 +80,4 @@ merchantRouter.patch(
   merchantAuthController.updateMe
 );
 
-module.exports = merchantRouter;
+module.exports = merchantAuthRouter;
