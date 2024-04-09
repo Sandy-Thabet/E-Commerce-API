@@ -5,7 +5,7 @@ const multerStorageMerchant = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__dirname}/../utils/media/merchant-national-data`);
   },
-  filename: (res, file, cb) => {
+  filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
     cb(null, `${Date.now()}-${ext}`);
   },
@@ -15,7 +15,7 @@ const multerStorageUser = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__dirname}/../utils/media/user-images`);
   },
-  filename: (res, file, cb) => {
+  filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
     cb(null, `${Date.now()}-${ext}`);
   },
@@ -25,7 +25,7 @@ const multerStorageAdmin = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__dirname}/../utils/media/admin-images`);
   },
-  filename: (res, file, cb) => {
+  filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
     cb(null, `${Date.now()}-${ext}`);
   },
@@ -35,7 +35,7 @@ const multerStorageProduct = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__dirname}/../utils/media/product-images`);
   },
-  filename: (res, file, cb) => {
+  filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
     cb(null, `${Date.now()}-${ext}`);
   },
@@ -54,6 +54,7 @@ exports.uploadNationalImage = multer({
   fileFilter: multerFilter,
 });
 
+// #Product Images
 exports.uploadProductImage = multer({
   storage: multerStorageProduct,
   fileFilter: multerFilter,

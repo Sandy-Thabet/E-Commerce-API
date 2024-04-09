@@ -15,3 +15,24 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(new SuccessResponse(category));
 });
+
+exports.getAllCategories = catchAsync(async (req, res, next) => {
+  const { name } = req.query;
+  const filter = { name };
+
+  const { categories, totalCategories } =
+    await categoryService.getAllCategories(
+      filter,
+      req.query.sort,
+      req.query.page,
+      req.query.size
+    );
+
+  return res.status(200).json(
+    new SuccessResponse({
+      total: totalCategories.length,
+      results: categories.length,
+      categories,
+    })
+  );
+});

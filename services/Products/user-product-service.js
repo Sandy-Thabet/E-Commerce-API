@@ -1,3 +1,4 @@
+const ProductImages = require('../../database/models/product-images');
 const Product = require('../../database/models/product-model');
 const AppError = require('../../utils/appError');
 
@@ -19,16 +20,20 @@ exports.getAllProducts = async (filter, page, size, sort) => {
 
     query.status = 'active';
 
+    const totalProducts = await Product.countDocuments(query);
     const products = await Product.find(query)
+      .and({ status: { $ne: 'inactive' } })
       .sort(sort)
       .limit(size)
       .skip((page - 1) * size)
+      .select('-images')
       .select('-status')
       .select('-__v')
       .populate({ path: 'category', select: '-__v' })
       .populate({ path: 'merchant', select: 'firstName lastName' });
 
-    return products;
+    console.log(products, totalProducts);
+    return { totalProducts, products };
   } catch (err) {
     throw err;
   }
@@ -36,7 +41,7 @@ exports.getAllProducts = async (filter, page, size, sort) => {
 
 exports.getProduct = async (productId) => {
   try {
-    const product = await Product.findById(productId)
+    const product = await Product.findOne({ _id: productId, status: 'active' })
       .populate({ path: 'category', select: '-__v' })
       .populate({ path: 'merchant', select: 'firstName lastName' })
       .select('-__v');
@@ -44,8 +49,11 @@ exports.getProduct = async (productId) => {
     if (!product || product.status !== 'active') {
       throw new AppError('No product found by this id.', 404);
     }
+
+    const images = await ProductImages.findOne({ productId });
+
     product.status = undefined;
-    return product;
+    return { product, images };
   } catch (err) {
     throw err;
   }

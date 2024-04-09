@@ -9,12 +9,21 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllCategories = catchAsync(async (req, res, next) => {
-  const categories = await merchantCategoryService.getAllCategories(
-    req.query.size,
-    req.query.page
-  );
+  const { name } = req.query;
+  const filter = { name };
+  const { totalCategories, categories } =
+    await merchantCategoryService.getAllCategories(
+      filter,
+      req.query.sort,
+      req.query.page,
+      req.query.sizw
+    );
 
-  return res
-    .status(200)
-    .json(new SuccessResponse({ results: categories.length, categories }));
+  return res.status(200).json(
+    new SuccessResponse({
+      total: totalCategories.length,
+      results: categories.length,
+      categories,
+    })
+  );
 });

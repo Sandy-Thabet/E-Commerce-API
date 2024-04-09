@@ -8,11 +8,22 @@ exports.getCategory = async (categoryId) => {
   }
 };
 
-exports.getAllCategory = async (page, size) => {
+exports.getAllCategories = async (filter, sort, page, size) => {
   try {
-    return await Category.find()
+    const { ...otherFilters } = filter;
+
+    Object.entries(otherFilters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        query[key] = value;
+      }
+    });
+
+    const totalCategories = await Category.find(query);
+    const categories = await Category.find(query)
+      .sort(sort)
       .limit(size)
       .skip((page - 1) * size);
+    return { categories, totalCategories };
   } catch (err) {
     throw err;
   }

@@ -9,7 +9,8 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 
   const product = await merchantProductService.createProduct(
     req.merchant.id,
-    body
+    body,
+    req.file
   );
 
   return res.status(201).json(new SuccessResponse(product));
@@ -22,26 +23,42 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
   const product = await merchantProductService.updateProduct(
     req.params.id,
     body,
-    req.merchant.id
+    req.merchant.id,
+    req.file
   );
 
   return res.status(200).json(new SuccessResponse(product));
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await merchantProductService.getProduct(req.params.id);
+  const product = await merchantProductService.getProduct(
+    req.params.id,
+    req.merchant.id
+  );
 
   return res.status(200).json(new SuccessResponse(product));
 });
 
 exports.getAllMyProducts = catchAsync(async (req, res, next) => {
-  const products = await merchantProductService.getAllMyProducts(
-    req.merchant.id
-  );
+  const { name, status, price, category } = req.query;
+  const filter = { name, status, price, category };
 
-  return res
-    .status(200)
-    .json(new SuccessResponse({ results: products.length, products }));
+  const { totalProducts, products } =
+    await merchantProductService.getAllMyProducts(
+      req.merchant.id,
+      filter,
+      req.query.sort,
+      req.query.page,
+      req.query.size
+    );
+
+  return res.status(200).json(
+    new SuccessResponse({
+      total: totalProducts.length,
+      results: products.length,
+      products,
+    })
+  );
 });
 
 exports.deleteProduct = catchAsync(async (req, res, next) => {
@@ -50,26 +67,23 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   return res.status(204).json(new SuccessResponse());
 });
 
-exports.getActiveProducts = catchAsync(async (req, res, next) => {
-  const products = await merchantProductService.getActiveProducts(
-    req.merchant.id
+exports.uploadProductImages = catchAsync(async (req, res, next) => {
+  const Images = req.files.map((file) => file.path);
+
+  const { uploaded, updated } =
+    await merchantProductService.uploadProductImages(
+      req.merchant.id,
+      req.params.id,
+      Images
+    );
+
+  console.log({ Images: uploaded, updated });
+
+  return res.status(200).json(
+    new SuccessResponse({
+      no_images: uploaded.length,
+      Images: uploaded,
+      product: updated,
+    })
   );
-
-  return res.status(200).json(new SuccessResponse(products));
-});
-
-exports.getPendnigProducts = catchAsync(async (req, res, next) => {
-  const products = await merchantProductService.getPendnigProducts(
-    req.merchant.id
-  );
-
-  return res.status(200).json(new SuccessResponse(products));
-});
-
-exports.getBlockedProducts = catchAsync(async (req, res, next) => {
-  const products = await merchantProductService.getBlockedProducts(
-    req.merchant.id
-  );
-
-  return res.status(200).json(new SuccessResponse(products));
 });

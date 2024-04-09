@@ -6,17 +6,17 @@ const merchantCategoryController = require('../../controllers/Categories/merchan
 const merchantCategoryRouter = express.Router();
 
 merchantCategoryRouter.get(
-  '/categories/:id',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  merchantCategoryController.getCategory
-);
-
-merchantCategoryRouter.get(
-  '/categories',
+  '/',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
   merchantCategoryController.getAllCategories
+);
+
+merchantCategoryRouter.get(
+  '/:id',
+  authorization.verifyTokenMerchant,
+  accessMiddleware('merchant', ['active']),
+  merchantCategoryController.getCategory
 );
 
 module.exports = merchantCategoryRouter;

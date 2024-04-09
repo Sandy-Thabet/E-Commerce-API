@@ -113,7 +113,9 @@ exports.login = async (email, password) => {
 
 exports.forgetPassword = async (email) => {
   try {
-    const merchant = await Merchant.findOne({ email });
+    const merchant = await Merchant.findOne({ email }).select(
+      '+validationCode'
+    );
 
     if (!merchant) {
       throw new AppError('Email is not exist!', 404);
@@ -137,7 +139,9 @@ exports.forgetPassword = async (email) => {
 
 exports.validateMerchantCode = async (email, code) => {
   try {
-    const merchant = await Merchant.findOne({ email });
+    const merchant = await Merchant.findOne({ email }).select(
+      '+validationCode'
+    );
 
     if (merchant && code !== merchant.validationCode) {
       throw new AppError('Invalid code!', 404);

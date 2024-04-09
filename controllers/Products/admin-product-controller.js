@@ -1,4 +1,6 @@
-const { getMerchant } = require('../../services/Auth/admin-service');
+const {
+  getMerchant,
+} = require('../../services/Merchants-Management/merchant-management-service');
 const adminProductService = require('../../services/Products/admin-product-service');
 const { catchAsync } = require('../../utils/catchAsync');
 const SuccessResponse = require('../../utils/successResponse');
@@ -16,9 +18,13 @@ exports.blockProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await adminProductService.getProduct(req.params.id);
+  const { images, product } = await adminProductService.getProduct(
+    req.params.id
+  );
 
-  return res.status(200).json(new SuccessResponse(product));
+  console.log(images);
+
+  return res.status(200).json(new SuccessResponse({ Images: images, product }));
 });
 
 exports.getMerchantProducts = catchAsync(async (req, res, next) => {
@@ -37,7 +43,7 @@ exports.getMerchantProducts = catchAsync(async (req, res, next) => {
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   const { name, status, price, category, price_from, price_to } = req.query;
   const filter = { name, status, price, category, price_from, price_to };
-  const products = await adminProductService.getAllProducts(
+  const { totalProducts, products } = await adminProductService.getAllProducts(
     filter,
     req.query.page,
     req.query.size,
@@ -46,6 +52,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(
     new SuccessResponse({
+      total: totalProducts.length,
       results: products.length,
       products,
     })

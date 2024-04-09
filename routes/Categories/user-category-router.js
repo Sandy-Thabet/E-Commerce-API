@@ -6,17 +6,17 @@ const userCategoryController = require('../../controllers/Categories/user-catego
 const userCategoryRouter = express.Router();
 
 userCategoryRouter.get(
-  '/categories/:id',
+  '/',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
-  userCategoryController.getCategory
+  userCategoryController.getAllCategories
 );
 
 userCategoryRouter.get(
-  '/categories',
+  '/:id',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active', 'pending']),
-  userCategoryController.getAllCategory
+  userCategoryController.getCategory
 );
 
 module.exports = userCategoryRouter;

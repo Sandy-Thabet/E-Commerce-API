@@ -1,5 +1,6 @@
 const AppError = require('../../utils/appError');
 const Product = require('../../database/models/product-model');
+const ProductImages = require('../../database/models/product-images');
 
 exports.approveProduct = async (productId) => {
   try {
@@ -38,8 +39,10 @@ exports.getProduct = async (productId) => {
     if (!product) {
       throw new AppError('no product found by this id.', 404);
     }
+    const images = await ProductImages.find({ productId });
+    console.log(images);
 
-    return product;
+    return { product, images };
   } catch (err) {
     throw err;
   }
@@ -53,7 +56,7 @@ exports.getMerchantProducts = async (merchantId) => {
       throw new AppError('no products found for merchant.', 404);
     }
 
-    return products;
+    return { products, images };
   } catch (err) {
     throw err;
   }
@@ -63,27 +66,26 @@ exports.getAllProducts = async (filter, page, size, sort) => {
   try {
     const query = {};
 
-    // Extract price_from and price_to from filter if available
     const { price_from, price_to, ...otherFilters } = filter;
 
-    // Add other filter parameters to the query object
     Object.entries(otherFilters).forEach(([key, value]) => {
       if (value !== undefined) {
         query[key] = value;
       }
     });
 
-    // Add price range condition to the query if both price_from and price_to are provided
     if (price_from && price_to) {
       query.price = { $gte: parseInt(price_from), $lte: parseInt(price_to) };
     }
 
+    const totalProducts = await Product.find(query);
     const products = await Product.find(query)
+      .select('-images')
       .sort(sort)
       .limit(size)
       .skip((page - 1) * size);
 
-    return products;
+    return { totalProducts, products };
   } catch (err) {
     throw err;
   }

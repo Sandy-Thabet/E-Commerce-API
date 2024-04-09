@@ -8,8 +8,6 @@ const { accessMiddleware } = require('../../middlewares/access-middleware');
 const adminAuthRouter = express.Router();
 const validation = validationMiddlewares.validateSchema;
 
-// #Auth
-
 // signup
 adminAuthRouter.post(
   '/signup',
@@ -58,123 +56,6 @@ adminAuthRouter.patch(
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminAuthController.updateMe
-);
-
-// #Managment
-
-/* User */
-
-// get all users
-adminAuthRouter.get(
-  '/users',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getAllUsers
-);
-
-// get user
-adminAuthRouter.get(
-  '/user/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getUser
-);
-
-adminAuthRouter.get(
-  '/pending-users',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getPendingUsers
-);
-
-adminAuthRouter.get(
-  '/active-users',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getActiveUsers
-);
-
-adminAuthRouter.get(
-  '/blocked-users',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getBlockedUsers
-);
-
-adminAuthRouter.get(
-  '/:id/block-user',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.blockUser
-);
-
-adminAuthRouter.get(
-  '/:id/delete-user',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.deleteUser
-);
-
-/* Merchant */
-
-// approve merchant
-adminAuthRouter.get(
-  '/approve/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.approveMerchant
-);
-
-// get all merchants
-adminAuthRouter.get(
-  '/merchants',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getAllMerchants
-);
-
-//get merchant
-adminAuthRouter.get(
-  '/merchant/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.getMerchant
-);
-
-// // get pending merchants
-// adminAuthRouter.get(
-//   '/pending-merchants',
-//   authorization.verifyTokenAdmin,
-//   accessMiddleware('admin'),
-//   adminAuthController.getPendingMerchants
-// );
-
-// adminAuthRouter.get(
-//   '/pending-approval-merchants',
-//   authorization.verifyTokenAdmin,
-//   accessMiddleware('admin'),
-//   adminAuthController.getPendingApprovalMerchants
-// );
-
-// adminAuthRouter.get(
-//   '/active-merchants',
-//   authorization.verifyTokenAdmin,
-//   accessMiddleware('admin'),
-//   adminAuthController.getActiveMerchant
-// );
-
-adminAuthRouter.patch(
-  '/merchant/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.blockMerchant
-);
-
-adminAuthRouter.delete(
-  '/merchant/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminAuthController.deleteMerchant
 );
 
 module.exports = adminAuthRouter;

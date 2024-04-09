@@ -13,29 +13,12 @@ const validation = validationMiddlewares.validateSchema;
 
 // create product
 merchantProductRouter.post(
-  '/product',
+  '/',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
-  uploadProductImage.array('product_Image', 10),
+  uploadProductImage.single('main_Image'),
   validation(productValidation.createProduct),
   productController.createProduct
-);
-
-// update product
-merchantProductRouter.patch(
-  '/update-:id',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  validation(productValidation.updateProduct),
-  productController.updateProduct
-);
-
-// get product
-merchantProductRouter.get(
-  '/product-:id',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  productController.getProduct
 );
 
 // get all products
@@ -46,36 +29,38 @@ merchantProductRouter.get(
   productController.getAllMyProducts
 );
 
-// delete product
+merchantProductRouter.post(
+  '/:id',
+  authorization.verifyTokenMerchant,
+  accessMiddleware('merchant', ['active']),
+  uploadProductImage.array('images', 10),
+  productController.uploadProductImages
+);
+
+// update product
+merchantProductRouter.patch(
+  '/:id',
+  authorization.verifyTokenMerchant,
+  accessMiddleware('merchant', ['active']),
+  uploadProductImage.single('main_Image'),
+  validation(productValidation.updateProduct),
+  productController.updateProduct
+);
+
+// get product
 merchantProductRouter.get(
-  '/delete-product/:id',
+  '/:id',
+  authorization.verifyTokenMerchant,
+  accessMiddleware('merchant', ['active']),
+  productController.getProduct
+);
+
+// delete product
+merchantProductRouter.delete(
+  '/:id',
   authorization.verifyTokenMerchant,
   accessMiddleware('merchant', ['active']),
   productController.deleteProduct
-);
-
-// get active products
-merchantProductRouter.get(
-  '/products/active/',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  productController.getActiveProducts
-);
-
-// get pending products
-merchantProductRouter.get(
-  '/products/pendingAdminApproval',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  productController.getPendnigProducts
-);
-
-// get blocked products
-merchantProductRouter.get(
-  '/products/blocked',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
-  productController.getBlockedProducts
 );
 
 module.exports = merchantProductRouter;

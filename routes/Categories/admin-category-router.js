@@ -10,7 +10,7 @@ const validation = validationMiddlewares.validateSchema;
 
 // create category
 adminCategoryRouter.post(
-  '/create-category',
+  '/',
   validation(categoryValidation.createCategory),
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
@@ -18,7 +18,14 @@ adminCategoryRouter.post(
 );
 
 adminCategoryRouter.get(
-  '/categories/:id',
+  '/',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  adminCategoryController.getAllCategories
+);
+
+adminCategoryRouter.get(
+  '/:id',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminCategoryController.getCategory

@@ -15,9 +15,9 @@ const validation = validationMiddlewares.validateSchema;
 // signup
 merchantAuthRouter.post(
   '/signup',
+  Uploader.uploadNationalImage.single('national_ID_Image'),
   validation(merchantValidation.signUp, 'body'),
   validation(MerchantNationalDataValidatin.merchantNationalData),
-  Uploader.uploadNationalImage.single('national_ID_Image'),
   merchantAuthController.signup
 );
 

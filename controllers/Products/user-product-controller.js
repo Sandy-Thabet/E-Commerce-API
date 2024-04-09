@@ -13,7 +13,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     price_to,
   };
 
-  const products = await userProductService.getAllProducts(
+  const { products, totalProducts } = await userProductService.getAllProducts(
     filter,
     req.query.page,
     req.query.size,
@@ -22,6 +22,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(
     new SuccessResponse({
+      total: totalProducts,
       results: products.length,
       products,
     })
@@ -29,7 +30,9 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await userProductService.getProduct(req.params.id);
+  const { images, product } = await userProductService.getProduct(
+    req.params.id
+  );
 
-  return res.status(200).json(new SuccessResponse(product));
+  return res.status(200).json(new SuccessResponse({ Images: images, product }));
 });

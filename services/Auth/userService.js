@@ -43,7 +43,9 @@ exports.signUp = async (userData) => {
 
 exports.validateCode = async (userId, code) => {
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select('+validationCode');
+
+    console.log(user);
 
     if (user && code === user.validationCode) {
       await User.updateOne(user, {
@@ -123,7 +125,7 @@ exports.login = async (email, password) => {
 
 exports.forgetPassword = async (email) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+validationCode');
     if (!user) {
       throw new AppError('Email is not exist.', 404);
     }
@@ -146,7 +148,7 @@ exports.forgetPassword = async (email) => {
 
 exports.validateUserCode = async (email, code) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+validationCode');
 
     if (!user || code !== user.validationCode) {
       throw new AppError('Invalid code!', 400);
