@@ -29,22 +29,6 @@ exports.getCoupon = async (couponId) => {
   }
 };
 
-exports.checkCode = async (code) => {
-  try {
-    console.log(code);
-    const coupon = await Coupon.findOne({ code });
-    console.log(coupon);
-
-    if (!coupon) {
-      throw new AppError('No Coupon found by this id.', 404);
-    }
-
-    return coupon;
-  } catch (err) {
-    throw err;
-  }
-};
-
 exports.getAllCoupons = async (filter) => {
   try {
     const query = {};

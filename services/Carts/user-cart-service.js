@@ -1,6 +1,5 @@
 const CartItem = require('../../database/models/cartItem-model');
 const Cart = require('../../database/models/cart-model');
-const Product = require('../../database/models/product-model');
 const { getProduct } = require('../Products/user-product-service');
 const AppError = require('../../utils/appError');
 
@@ -8,7 +7,7 @@ exports.checkAndCreateCart = async (userId) => {
   try {
     const currentCart = await Cart.findOne({ user: userId }).populate({
       path: 'items',
-      populate: { path: 'product' },
+      populate: { path: 'product', match: { status: 'active' } },
     });
 
     let cart;
@@ -16,6 +15,8 @@ exports.checkAndCreateCart = async (userId) => {
       cart = await Cart.create({ user: userId });
       return cart;
     }
+
+    currentCart.items = currentCart.items.filter((item) => item.product);
 
     return currentCart;
   } catch (err) {
