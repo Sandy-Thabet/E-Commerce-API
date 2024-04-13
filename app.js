@@ -8,6 +8,7 @@ const merchantsRouter = require('./routes/main-routers/merchants-router');
 const adminsRouter = require('./routes/main-routers/admins-router');
 const errorController = require('./controllers/errorController');
 const bodyParser = require('body-parser');
+const generalRouter = require('./routes/main-routers/general-router');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/v1', mainRouter);
 mainRouter.use('/users', usersRouter);
 mainRouter.use('/merchants', merchantsRouter);
 mainRouter.use('/admins', adminsRouter);
+mainRouter.use('/general', generalRouter);
 
 app.use('*', (req, res, next) => {
   return res.status(404).json({
