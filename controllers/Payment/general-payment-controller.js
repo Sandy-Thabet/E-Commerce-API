@@ -2,12 +2,11 @@ const { catchAsync } = require('../../utils/catchAsync');
 const generalPaymentService = require('../../services/Payment/general-payment-service');
 
 exports.handlePaymobCallback = catchAsync(async (req, res, next) => {
-  console.log('BODY = ', req.body);
-  console.log('QUERY = ', req.query);
+  console.log(req.body.transaction, req.body.hmac);
 
   await generalPaymentService.handlePaymobCallback(
-    req.body.obj,
-    req.query.hmac
+    req.body.transaction,
+    req.body.hmac
   );
 
   return res.status(200).send();
