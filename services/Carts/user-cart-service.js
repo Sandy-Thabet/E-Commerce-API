@@ -42,6 +42,7 @@ exports.addProduct = async (userId, body) => {
     }
 
     const newCartItem = await CartItem.create({
+      cart: cart.id,
       product: productId,
       quantity: quantity,
     });
@@ -106,6 +107,24 @@ exports.removeCartProduct = async (userId, productId) => {
 
     // Delete the cart item from the CartItem model
     await CartItem.deleteOne({ _id: cartItem._id });
+
+    await cart.save();
+
+    return cart;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.resetCart = async (userId) => {
+  try {
+    const cart = await Cart.findOne({ user: userId });
+
+    if (cart) {
+      await CartItem.deleteMany({ cart: cart.id });
+    }
+
+    cart.items = [];
 
     await cart.save();
 

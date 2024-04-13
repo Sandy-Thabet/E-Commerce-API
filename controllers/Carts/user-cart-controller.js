@@ -43,3 +43,9 @@ exports.removeCartProduct = catchAsync(async (req, res, next) => {
     .status(200)
     .json(new SuccessResponse({ items: cart.items.length, cart }));
 });
+
+exports.resetCart = catchAsync(async (req, res, next) => {
+  const cart = await userCartService.resetCart(req.user.id);
+
+  return res.status(200).json(new SuccessResponse(cart));
+});

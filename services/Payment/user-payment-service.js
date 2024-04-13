@@ -1,4 +1,3 @@
-const Cart = require('../../database/models/cart-model');
 const { checkAndCreateCart } = require('../Carts/user-cart-service');
 const userCouponService = require('../Coupons/user-coupon-service');
 
@@ -8,13 +7,14 @@ exports.getCheckout = async (userId, code) => {
 
     let subTotal = 0;
     let discount = 0;
+    let coupon;
 
     for (const item of userCart.items) {
       if (!item.product) continue;
       subTotal += item.product.price * item.quantity;
     }
     if (code) {
-      const coupon = await userCouponService.checkCode(code);
+      coupon = await userCouponService.checkCode(code);
 
       discount = subTotal * (coupon.discount_percentage / 100);
     }
@@ -26,7 +26,7 @@ exports.getCheckout = async (userId, code) => {
       totalPrice: subTotal - discount,
     };
 
-    return checkout;
+    return { checkout, coupon };
   } catch (err) {
     throw err;
   }

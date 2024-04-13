@@ -7,3 +7,7 @@ exports.createCoupon = Joi.object({
 exports.updateCoupon = Joi.object({
   discount_percentage: Joi.number(),
 });
+
+// exports.addCoupon = Joi.object({
+//   code: Joi.
+// })

@@ -24,6 +24,13 @@ userCartRouter.get(
 );
 
 userCartRouter.patch(
+  '/',
+  authorization.verifyTokenUser,
+  accessMiddleware('user', ['active']),
+  userCartController.resetCart
+);
+
+userCartRouter.patch(
   '/:id',
   authorization.verifyTokenUser,
   accessMiddleware('user', ['active']),
