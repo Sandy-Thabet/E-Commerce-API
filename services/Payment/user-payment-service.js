@@ -101,11 +101,6 @@ exports.createPayment = async (user, order) => {
     const paymobOrder = await createPaymobOrder(order, token);
     const paymentData = await createPayment(order, paymobOrder.id, user, token);
 
-    await Payment.create({
-      order_id: order.id,
-      paymob_transaction_id: paymobOrder.id,
-    });
-
     const link = `https://accept.paymob.com/api/acceptance/iframes/837653?payment_token=${paymentData.token}`;
 
     return link;
@@ -118,6 +113,9 @@ const getToken = async () => {
   try {
     const requestOptions = {
       method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
       body: JSON.stringify({
         api_key: process.env.PAYMOB_API_KEY,
       }),
@@ -144,6 +142,9 @@ const createPaymobOrder = async (order, token) => {
   try {
     const requestOptions = {
       method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
       body: JSON.stringify({
         auth_token: token,
         delivery_needed: false,
@@ -174,6 +175,9 @@ const createPayment = async (order, paymobOrderId, user, token) => {
   try {
     const requestOptions = {
       method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
       body: JSON.stringify({
         auth_token: token,
         expiration: 3600,

@@ -4,6 +4,11 @@ const Order = require('../../database/models/order-model');
 
 exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
   try {
+    console.log(
+      'paymobObj.merchant_order_id ==> ',
+      paymobObj.merchant_order_id
+    );
+
     const isValidHMAC = validatePaymobHMAC(paymobObj, paymobHMAC);
     if (!isValidHMAC) {
       // TODO: Throw error
@@ -14,16 +19,16 @@ exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
       return;
     }
 
-    const payment = await Payment.findOne({
-      paymob_transaction_id: paymobObj.order.id,
-    });
+    // const payment = await Payment.findOne({
+    //   paymob_transaction_id: paymobObj.order.id,
+    // });
 
-    if (!payment) {
-      console.log(payment);
-      return;
-    }
+    // if (!payment) {
+    //   console.log(payment);
+    //   return;
+    // }
 
-    const order = await Order.findById(payment.order_id);
+    const order = await Order.findById(paymobObj.merchant_order_id);
 
     if (!order) {
       console.log(order);
