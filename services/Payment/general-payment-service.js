@@ -2,7 +2,11 @@ const crypto = require('crypto');
 const Payment = require('../../database/models/payment-model');
 const Order = require('../../database/models/order-model');
 
-exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
+exports.handlePaymobCallback = async (
+  paymobObj,
+  paymobHMAC,
+  paymobIntention
+) => {
   try {
     const isValidHMAC = validatePaymobHMAC(paymobObj, paymobHMAC);
     if (!isValidHMAC) {
@@ -14,7 +18,7 @@ exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
     }
 
     const payment = await Payment.findOne({
-      paymob_transaction_id: paymobObj.id,
+      paymob_transaction_id: paymobIntention.id,
     });
 
     if (!payment) {
