@@ -118,7 +118,6 @@ const getToken = async () => {
   try {
     const requestOptions = {
       method: 'POST',
-      headers: myHeaders,
       body: JSON.stringify({
         api_key: process.env.PAYMOB_API_KEY,
       }),
@@ -145,7 +144,6 @@ const createPaymobOrder = async (order, token) => {
   try {
     const requestOptions = {
       method: 'POST',
-      headers: myHeaders,
       body: JSON.stringify({
         auth_token: token,
         delivery_needed: false,
@@ -176,7 +174,6 @@ const createPayment = async (order, paymobOrderId, user, token) => {
   try {
     const requestOptions = {
       method: 'POST',
-      headers: myHeaders,
       body: JSON.stringify({
         auth_token: token,
         expiration: 3600,
