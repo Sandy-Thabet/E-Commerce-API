@@ -2,15 +2,12 @@ const crypto = require('crypto');
 const Payment = require('../../database/models/payment-model');
 const Order = require('../../database/models/order-model');
 
-exports.handlePaymobCallback = async (
-  paymobObj,
-  paymobHMAC,
-  paymobIntention
-) => {
+exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
   try {
     const isValidHMAC = validatePaymobHMAC(paymobObj, paymobHMAC);
     if (!isValidHMAC) {
       // TODO: Throw error
+      console.error('Invalid HMAC');
     }
 
     if (!paymobObj.success) {
@@ -18,7 +15,7 @@ exports.handlePaymobCallback = async (
     }
 
     const payment = await Payment.findOne({
-      paymob_transaction_id: paymobIntention.id,
+      paymob_transaction_id: paymobObj.order.id,
     });
 
     if (!payment) {
@@ -45,15 +42,15 @@ const validatePaymobHMAC = (paymobObj, paymobHMAC) => {
 
     console.log(concatenedString);
 
-    const hmac = crypto.createHmac('sha512', process.env.PAYMOB_HMAC);
+    const hmac = crypto
+      .createHmac('sha512', process.env.PAYMOB_HMAC)
+      .update(concatenedString)
+      .digest('hex');
 
-    hmac.update(concatenedString);
+    console.log('Result HMAC ', hmac);
+    console.log('paymobHMAC ', paymobHMAC);
 
-    const hash = hmac.digest('hex');
-
-    console.log('Result HMAC ', hash);
-
-    return hash === paymobHMAC;
+    return hmac === paymobHMAC;
   } catch (err) {
     throw err;
   }
