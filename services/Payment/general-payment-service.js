@@ -23,7 +23,7 @@ exports.handlePaymobCallback = async (paymobObj, paymobHMAC) => {
       return;
     }
 
-    const order = await Order.findById(paymobObj.merchant_order_id);
+    const order = await Order.findById(payment.order_id);
 
     if (!order) {
       console.log(order);
