@@ -12,9 +12,30 @@ const userOrderRouter = express.Router();
 userOrderRouter.post(
   '/',
   authorization.verifyTokenUser,
-  accessMiddleware('user', 'active'),
+  accessMiddleware('user', ['active']),
   //   validation(couponValidation.),
   userOrderController.placeOrder
+);
+
+userOrderRouter.get(
+  '/',
+  authorization.verifyTokenUser,
+  accessMiddleware('user', ['active']),
+  userOrderController.getAllMyOrders
+);
+
+userOrderRouter.patch(
+  '/:id',
+  authorization.verifyTokenUser,
+  accessMiddleware('user', ['active']),
+  userOrderController.repayOrder
+);
+
+userOrderRouter.get(
+  '/:id',
+  authorization.verifyTokenUser,
+  accessMiddleware('user', ['active']),
+  userOrderController.getOrder
 );
 
 module.exports = userOrderRouter;

@@ -8,7 +8,7 @@ const userPaymentRouter = express.Router();
 userPaymentRouter.get(
   '/checkout',
   authorization.verifyTokenUser,
-  accessMiddleware('user', 'active'),
+  accessMiddleware('user', ['active']),
   userPaymentController.getCheckout
 );
 

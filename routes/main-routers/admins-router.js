@@ -5,6 +5,7 @@ const merchantManagementRouter = require('../Merchants-Management/mrechant-manag
 const adminProductRouter = require('../Products/admin-product-router');
 const adminCategoryRouter = require('./../Categories/admin-category-router');
 const adminCouponRouter = require('../Coupons/admin-coupon-router');
+const adminOrderRouter = require('../Orders/admin-order-router');
 
 const adminsRouter = express.Router();
 
@@ -14,5 +15,6 @@ adminsRouter.use('/merchants', merchantManagementRouter);
 adminsRouter.use('/products', adminProductRouter);
 adminsRouter.use('/categories', adminCategoryRouter);
 adminsRouter.use('/coupons', adminCouponRouter);
+adminsRouter.use('/orders', adminOrderRouter);
 
 module.exports = adminsRouter;

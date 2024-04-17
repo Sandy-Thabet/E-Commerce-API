@@ -95,7 +95,7 @@ const createPaymobOrder = async (order, token) => {
         auth_token: token,
         delivery_needed: false,
         amount_cents: order.total * 100,
-        merchant_order_id: order.id,
+        // merchant_order_id: order.id,
         items: [],
       }),
       redirect: 'follow',
