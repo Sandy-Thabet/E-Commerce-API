@@ -12,7 +12,7 @@ const generalRouter = require('./routes/main-routers/general-router');
 
 const app = express();
 
-app.use(express.static('Public'));
+app.use(express.static('public'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
