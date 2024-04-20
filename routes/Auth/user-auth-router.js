@@ -73,4 +73,11 @@ userAuthRouter.patch(
   userAuthController.updateMe
 );
 
+userAuthRouter.delete(
+  '/logout',
+  authorization.verifyTokenUser,
+  accessMiddleware('user'),
+  userAuthController.logout
+);
+
 module.exports = userAuthRouter;

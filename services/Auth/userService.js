@@ -5,6 +5,7 @@ const ValidationCode = require('../../utils/validationCode');
 const User = require('../../database/models/userModel');
 const AppError = require('../../utils/appError');
 const bcrypt = require('bcrypt');
+const Token = require('../../database/models/token-model');
 
 exports.signUp = async (userData) => {
   try {
@@ -27,7 +28,7 @@ exports.signUp = async (userData) => {
     });
 
     // generate tokens and return user with jwt tokens
-    const token = sharedAuthService.createToken(newUser);
+    const token = await sharedAuthService.createToken(newUser);
 
     newUser.password = undefined;
     newUser.validationCode = undefined;
@@ -108,16 +109,15 @@ exports.login = async (email, password) => {
       throw new AppError('Unauthorized!', 401);
     }
 
-    if (currentUser) {
-      const pass = await bcrypt.compare(password, currentUser.password);
-      currentUser.password = undefined;
+    const pass = await bcrypt.compare(password, currentUser.password);
+    currentUser.password = undefined;
 
-      if (pass) {
-        const token = sharedAuthService.createToken(currentUser);
-        return { user: currentUser, token };
-      }
+    if (!pass) {
+      throw new AppError('Invalid email or password.', 401);
     }
-    throw new AppError('Invalid email or password.', 401);
+
+    const token = await sharedAuthService.createToken(currentUser);
+    return { user: currentUser, token };
   } catch (err) {
     throw err;
   }
@@ -217,6 +217,14 @@ exports.updateMe = async (userId, data) => {
     const token = await sharedAuthService.createToken(newUser);
 
     return { newUser, token };
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.logout = async (userId, token) => {
+  try {
+    return await Token.deleteOne({ _id: token.id, user: userId });
   } catch (err) {
     throw err;
   }

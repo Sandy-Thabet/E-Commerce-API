@@ -90,3 +90,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(new SuccessResponse(merchant));
 });
+
+exports.logout = catchAsync(async (req, res, next) => {
+  await merchantAuthService.logout(req.merchant.id, req.merchant.token);
+
+  return res.status(204).send();
+});

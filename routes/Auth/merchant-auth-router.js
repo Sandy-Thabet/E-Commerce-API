@@ -80,4 +80,11 @@ merchantAuthRouter.patch(
   merchantAuthController.updateMe
 );
 
+merchantAuthRouter.delete(
+  '/logout',
+  authorization.verifyTokenMerchant,
+  accessMiddleware('merchant'),
+  merchantAuthController.logout
+);
+
 module.exports = merchantAuthRouter;

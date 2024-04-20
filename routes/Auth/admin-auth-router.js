@@ -57,5 +57,11 @@ adminAuthRouter.patch(
   accessMiddleware('admin'),
   adminAuthController.updateMe
 );
+adminAuthRouter.delete(
+  '/logout',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  adminAuthController.logout
+);
 
 module.exports = adminAuthRouter;

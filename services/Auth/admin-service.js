@@ -5,12 +5,13 @@ const ValidationCode = require('../../utils/validationCode');
 const sharedAuthService = require('./sharedService');
 const bcrypt = require('bcrypt');
 const sendEmail = require('../../utils/emails');
+const Token = require('../../database/models/token-model');
 
 exports.signup = async (adminData) => {
   try {
     const admin = await adminRepository.createAdmin({ ...adminData });
 
-    const token = sharedAuthService.createToken(admin);
+    const token = await sharedAuthService.createToken(admin);
 
     admin.password = undefined;
 
@@ -32,7 +33,7 @@ exports.login = async (email, password) => {
       admin.password = undefined;
 
       if (pass) {
-        const token = sharedAuthService.createToken(admin);
+        const token = await sharedAuthService.createToken(admin);
         return { admin, token };
       }
     }
@@ -137,9 +138,17 @@ exports.updateMe = async (adminId, data) => {
       throw new Error('Failed to update admin');
     }
 
-    const token = sharedAuthService.createToken(newAdmin);
+    const token = await sharedAuthService.createToken(newAdmin);
 
     return { newAdmin, token };
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.logout = async (adminId, token) => {
+  try {
+    return await Token.deleteOne({ _id: token.id, admin: adminId });
   } catch (err) {
     throw err;
   }

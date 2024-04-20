@@ -77,3 +77,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   return res.status(200).json(new SuccessResponse(user));
 });
+
+exports.logout = catchAsync(async (req, res, next) => {
+  await userAuthService.logout(req.user.id, req.user.token);
+
+  return res.status(204).send();
+});

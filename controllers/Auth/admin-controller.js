@@ -59,4 +59,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   return res.status(200).json(new SuccessResponse(admin));
 });
 
-//
+exports.logout = catchAsync(async (req, res, next) => {
+  await adminAuthService.logout(req.admin.id, req.admin.token);
+
+  return res.status(204).send();
+});

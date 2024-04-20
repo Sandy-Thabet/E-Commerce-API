@@ -6,6 +6,7 @@ const Merchant = require('../../database/models/merchantModel');
 const MerchantNationalDataRepository = require('../../database/repositories/merchant-national-data-repository');
 const AppError = require('../../utils/appError');
 const bcrypt = require('bcrypt');
+const Token = require('../../database/models/token-model');
 
 exports.signUp = async (merchantData, nationalData, nationalImage) => {
   try {
@@ -31,7 +32,7 @@ exports.signUp = async (merchantData, nationalData, nationalImage) => {
       },
     });
 
-    const token = sharedAuthService.createToken(merchant);
+    const token = await sharedAuthService.createToken(merchant);
 
     merchant.validationCode = undefined;
     merchant.password = undefined;
@@ -101,7 +102,7 @@ exports.login = async (email, password) => {
       const pass = await bcrypt.compare(password, merchant.password);
       merchant.password = undefined;
       if (pass) {
-        const token = sharedAuthService.createToken(merchant);
+        const token = await sharedAuthService.createToken(merchant);
         return { merchant, token };
       }
     }
@@ -209,6 +210,14 @@ exports.updateMe = async (merchantId, data) => {
     const token = await sharedAuthService.createToken(newMerchant);
 
     return { newMerchant, token };
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.logout = async (merchantId, token) => {
+  try {
+    return await Token.deleteOne({ _id: token.id, merchant: merchantId });
   } catch (err) {
     throw err;
   }
