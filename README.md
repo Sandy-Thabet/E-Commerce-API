@@ -26,7 +26,7 @@ The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com]
 - **JSON Web Tokens (JWT):** Authentication and authorization mechanism.
 - **Multer:** Middleware for handling multipart/form-data, used for file uploads.
 - **Joi:** Schema validation library for JavaScript.
-- **Nodemailer:** Module for sending emails from Node.js applications.
+- **Nodemailer:** Module for sending emails from Node.js applications, including Gmail integration.
 - **Render:** Cloud platform for deployment.
 
 ## API Documentation
