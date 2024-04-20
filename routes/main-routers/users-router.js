@@ -5,6 +5,7 @@ const userCartRouter = require('../Carts/user-cart-router');
 const userCategoryRouter = require('../Categories/user-category-router');
 const userPaymentRouter = require('../Payment/user-payment-router');
 const userOrderRouter = require('../Orders/user-order-router');
+const userReviewRouter = require('../Reviews/user-review-router');
 
 const usersRouter = express.Router();
 
@@ -14,5 +15,6 @@ usersRouter.use('/carts', userCartRouter);
 usersRouter.use('/categories', userCategoryRouter);
 usersRouter.use('/payment', userPaymentRouter);
 usersRouter.use('/orders', userOrderRouter);
+usersRouter.use('/reviews', userReviewRouter);
 
 module.exports = usersRouter;
