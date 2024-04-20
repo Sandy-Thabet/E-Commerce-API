@@ -2,13 +2,8 @@
 
 Welcome to the E-Commerce API project! This API provides endpoints for managing products, users, merchants, orders, and more for an e-commerce platform.
 
-
 ## Deployment
 The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com](https://ecommerce-api-bosq.onrender.com)
-
-
-
-
 
 ## Features
 - **Admin APIs:** Endpoints for managing users, merchants, and products.
@@ -19,7 +14,6 @@ The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com]
 - **Order Management:** Place orders, view order history, and manage order status.
 - **Payment Integration:** Integration with payment gateways for secure transactions.
 - **Review System:** Allow users to leave reviews for products.
-
 
 ## Technologies Used
 - **Node.js:** Backend runtime environment.
@@ -32,10 +26,8 @@ The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com]
 - **Nodemailer:** Module for sending emails from Node.js applications.
 - **Render:** Cloud platform for deployment.
 
-
 ## API Documentation
 Documentation for the API endpoints can be found in the [API documentation file]().
 
-
 ## Contributors
-- [Kirolos Melad](https://github.com/kirolos-melad)
+- [Kirolos Melad](https://github.com/kokomelad19)
