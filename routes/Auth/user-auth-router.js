@@ -47,7 +47,7 @@ userAuthRouter.post(
 );
 
 userAuthRouter.post(
-  '/verify-reset-code',
+  '/verify-code',
   validation(userValidations.validateUserCode),
   userAuthController.validateUserCode
 );
