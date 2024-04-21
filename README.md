@@ -32,7 +32,3 @@ The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com]
 ## API Documentation
 
 Documentation for the API endpoints can be found in the [API documentation file]().
-
-## Contributors
-
-- [Kirolos Melad](https://github.com/kokomelad19)
