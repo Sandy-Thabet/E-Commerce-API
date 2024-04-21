@@ -4,7 +4,11 @@ Welcome to the E-Commerce API project! This API provides endpoints for managing 
 
 ## Deployment
 
-The API is deployed and accessible at: [https://ecommerce-api-bosq.onrender.com](https://ecommerce-api-bosq.onrender.com)
+The API is deployed and accessible at [https://ecommerce-api-bosq.onrender.com](https://ecommerce-api-bosq.onrender.com).
+
+## Architecture Diagram
+
+![Architecture Diagram](./path/to/your/architecture-diagram.png)
 
 ## Features
 
