@@ -32,6 +32,7 @@ Documentation for the API endpoints can be found in the [API documentation file]
 - **MongoDB:** NoSQL database for storing data.
 - **Mongoose:** MongoDB object modeling for Node.js.
 - **JSON Web Tokens (JWT):** Authentication and authorization mechanism.
+- **bcrypt:** Library for hashing passwords securely.
 - **Multer:** Middleware for handling multipart/form-data, used for file uploads.
 - **Joi:** Schema validation library for JavaScript.
 - **Nodemailer:** Module for sending emails from Node.js applications, including Gmail integration.
