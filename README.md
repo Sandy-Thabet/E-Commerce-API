@@ -6,9 +6,13 @@ Welcome to the E-Commerce API project! This API provides endpoints for managing 
 
 The API is deployed and accessible at [https://ecommerce-api-bosq.onrender.com](https://ecommerce-api-bosq.onrender.com).
 
-## Architecture Diagram
+## API Documentation
 
-![Architecture Diagram](./path/to/your/architecture-diagram.png)
+Documentation for the API endpoints can be found in the [API documentation file](https://documenter.getpostman.com/view/32928987/2sA3Bt1pEt).
+
+<!-- ## Architecture Diagram -->
+
+<!-- ![Architecture Diagram](./path/to/your/architecture-diagram.png) -->
 
 ## Features
 
@@ -32,7 +36,3 @@ The API is deployed and accessible at [https://ecommerce-api-bosq.onrender.com](
 - **Joi:** Schema validation library for JavaScript.
 - **Nodemailer:** Module for sending emails from Node.js applications, including Gmail integration.
 - **Render:** Cloud platform for deployment.
-
-## API Documentation
-
-Documentation for the API endpoints can be found in the [API documentation file]().
