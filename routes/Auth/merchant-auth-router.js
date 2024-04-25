@@ -67,7 +67,7 @@ merchantAuthRouter.post(
 merchantAuthRouter.get(
   '/me',
   authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active', 'pending']),
+  accessMiddleware('merchant', ['active', 'pending', 'pendingAdminApproval']),
   merchantAuthController.getMe
 );
 
