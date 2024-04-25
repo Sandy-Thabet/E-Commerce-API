@@ -12,9 +12,15 @@ exports.approveProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.blockProduct = catchAsync(async (req, res, next) => {
-  await adminProductService.blockProduct(req.params.id, req.merchant.id);
+  const product = await adminProductService.blockProduct(req.params.id);
 
-  return res.status(204).json(new SuccessResponse());
+  return res.status(200).json(new SuccessResponse(product));
+});
+
+exports.unblockProduct = catchAsync(async (req, res, next) => {
+  const product = await adminProductService.unblockProduct(req.params.id);
+
+  return res.status(200).json(new SuccessResponse(product));
 });
 
 exports.getProduct = catchAsync(async (req, res, next) => {

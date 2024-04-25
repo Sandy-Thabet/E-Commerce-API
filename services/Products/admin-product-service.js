@@ -32,6 +32,50 @@ exports.approveProduct = async (productId) => {
   }
 };
 
+exports.blockProduct = async (productId) => {
+  try {
+    const product = await Product.findById(productId);
+
+    if (
+      !product ||
+      product.status === 'blocked' ||
+      product.status === 'inactive'
+    ) {
+      throw new AppError('no product found by this id.', 404);
+    }
+
+    return await Product.findByIdAndUpdate(
+      productId,
+      {
+        status: 'blocked',
+      },
+      { new: true }
+    );
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.unblockProduct = async (productId) => {
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product || product.status !== 'blocked') {
+      throw new AppError('no product found by this id.', 404);
+    }
+
+    return await Product.findByIdAndUpdate(
+      productId,
+      {
+        status: 'active',
+      },
+      { new: true }
+    );
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.getProduct = async (productId) => {
   try {
     const product = await Product.findById(productId);

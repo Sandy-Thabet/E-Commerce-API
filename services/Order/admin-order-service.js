@@ -27,6 +27,10 @@ exports.getAllOrders = async (filter) => {
 
 exports.getOrder = async (orderId) => {
   try {
+    const isOrder = await Order.findById(orderId);
+
+    if (!isOrder) throw new AppError('No order found by this id.', 404);
+
     const order = await Order.findById(orderId)
       .populate({
         path: 'items',

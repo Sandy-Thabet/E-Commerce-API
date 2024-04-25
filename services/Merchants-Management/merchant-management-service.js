@@ -26,7 +26,7 @@ exports.approveMerchant = async (merchantId) => {
     if (merchant.status === 'pendingAdminApproval') {
       activatedMerchant = await Merchant.findByIdAndUpdate(merchantId, {
         status: 'active',
-      });
+      }).select('-validationCode');
       activatedMerchant.status = 'active';
       activatedMerchant.validationCode = undefined;
       return { activatedMerchant };
@@ -82,23 +82,45 @@ exports.getMerchant = async (id) => {
 
 exports.blockMerchant = async (id) => {
   try {
-    const merchant = await Merchant.findById(id);
+    const currentMerchant = await Merchant.findById(id).select(
+      '-validationCode'
+    );
 
     if (
-      !merchant ||
-      merchant.status === 'inactive' ||
-      merchant.status === 'blocked'
+      !currentMerchant ||
+      currentMerchant.status === 'inactive' ||
+      currentMerchant.status === 'blocked'
     ) {
+      throw new AppError('this merchant might be blocked or inactive.', 404);
+    }
+
+    const merchant = await Merchant.findByIdAndUpdate(id, {
+      status: 'blocked',
+    }).select('-validationCode');
+    merchant.status = 'blocked';
+    merchant.validationCode = undefined;
+
+    return merchant;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.unblockMerchant = async (id) => {
+  try {
+    const currentMerchant = await Merchant.findById(id);
+
+    if (!currentMerchant || currentMerchant.status !== 'blocked') {
       throw new AppError('no merchant found by this id!', 404);
     }
 
-    const blockedM = await Merchant.findByIdAndUpdate(id, {
-      status: 'blocked',
-    });
-    blockedM.status = 'blocked';
-    blockedM.validationCode = undefined;
+    const merchant = await Merchant.findByIdAndUpdate(id, {
+      status: 'active',
+    }).select('-validationCode');
+    merchant.status = 'active';
+    merchant.validationCode = undefined;
 
-    return blockedM;
+    return merchant;
   } catch (err) {
     throw err;
   }
@@ -106,23 +128,23 @@ exports.blockMerchant = async (id) => {
 
 exports.deleteMerchant = async (id) => {
   try {
-    const merchant = await Merchant.findById(id);
+    const currentMerchant = await Merchant.findById(id);
 
     if (
-      !merchant ||
-      merchant.status === 'inactive' ||
-      merchant.status === 'blocked'
+      !currentMerchant ||
+      currentMerchant.status === 'inactive' ||
+      currentMerchant.status === 'blocked'
     ) {
       throw new AppError('no merchant found by this id!', 404);
     }
 
-    const deleted = await Merchant.findByIdAndUpdate(id, {
+    const merchant = await Merchant.findByIdAndUpdate(id, {
       status: 'inactive',
-    });
-    deleted.status = 'inactive';
-    deleted.validationCode = undefined;
+    }).select('-validationCode');
+    merchant.status = 'inactive';
+    merchant.validationCode = undefined;
 
-    return deleted;
+    return merchant;
   } catch (err) {
     throw err;
   }

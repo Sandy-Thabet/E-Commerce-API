@@ -7,6 +7,7 @@ const OrderItem = require('../../database/models/orderItem-model');
 const { resetCart } = require('../Carts/user-cart-service');
 const AppError = require('../../utils/appError');
 const { default: mongoose } = require('mongoose');
+const Coupon = require('../../database/models/coupon-model');
 
 // exports.placeOrder = async (user, code) => {
 //   const session = await mongoose.connection.startSession();
@@ -131,6 +132,13 @@ exports.placeOrder = async (user, code) => {
       await order.save();
 
       console.log('Order Saved:', order);
+
+      const couponId = order.couponId;
+      const coupon = await Coupon.findById(couponId);
+      if (coupon) {
+        coupon.total_usage += 1;
+        await coupon.save();
+      }
 
       // Delete all cart items
       await resetCart(user.id);

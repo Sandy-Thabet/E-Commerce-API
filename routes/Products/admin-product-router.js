@@ -21,12 +21,28 @@ adminProductRouter.get(
   adminProductController.getMerchantProducts
 );
 
+// get product
+adminProductRouter.get(
+  '/:id',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  adminProductController.getProduct
+);
+
 // block product
 adminProductRouter.patch(
-  '/:id',
-  authorization.verifyTokenMerchant,
-  accessMiddleware('merchant', ['active']),
+  '/:id/block',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
   adminProductController.blockProduct
+);
+
+// unblock product
+adminProductRouter.patch(
+  '/:id/unblock',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  adminProductController.unblockProduct
 );
 
 // approve product
@@ -35,14 +51,6 @@ adminProductRouter.patch(
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   adminProductController.approveProduct
-);
-
-// get product
-adminProductRouter.get(
-  '/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  adminProductController.getProduct
 );
 
 module.exports = adminProductRouter;

@@ -13,15 +13,13 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     req.query.sort
   );
 
-  return res
-    .status(200)
-    .json(
-      new SuccessResponse({
-        total: totalUsers.length,
-        results: users.length,
-        users,
-      })
-    );
+  return res.status(200).json(
+    new SuccessResponse({
+      total: totalUsers.length,
+      results: users.length,
+      users,
+    })
+  );
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -36,9 +34,14 @@ exports.blockUser = catchAsync(async (req, res, next) => {
   return res.status(200).json(new SuccessResponse(user));
 });
 
+exports.unblockUser = catchAsync(async (req, res, next) => {
+  const user = await userManagementService.unblockUser(req.params.id);
+
+  return res.status(200).json(new SuccessResponse(user));
+});
+
 exports.deleteUser = catchAsync(async (req, res, next) => {
   const user = await userManagementService.deleteUser(req.params.id);
 
-  // return res.status(200).json(new SuccessResponse(user));
   return res.status(204).json(new SuccessResponse());
 });

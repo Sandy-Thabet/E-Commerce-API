@@ -21,6 +21,7 @@ userManagementRouter.get(
   userManagementController.getUser
 );
 
+// block user
 userManagementRouter.patch(
   '/:id',
   authorization.verifyTokenAdmin,
@@ -28,6 +29,15 @@ userManagementRouter.patch(
   userManagementController.blockUser
 );
 
+// block user
+userManagementRouter.patch(
+  '/:id/unblock',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  userManagementController.unblockUser
+);
+
+// delte user
 userManagementRouter.delete(
   '/:id',
   authorization.verifyTokenAdmin,

@@ -52,6 +52,14 @@ exports.blockMerchant = catchAsync(async (req, res, status) => {
   return res.status(200).json(new SuccessResponse(merchant));
 });
 
+exports.unblockMerchant = catchAsync(async (req, res, status) => {
+  const merchant = await merchantManagementService.unblockMerchant(
+    req.params.id
+  );
+
+  return res.status(200).json(new SuccessResponse(merchant));
+});
+
 exports.deleteMerchant = catchAsync(async (req, res, next) => {
   await merchantManagementService.deleteMerchant(req.params.id);
 

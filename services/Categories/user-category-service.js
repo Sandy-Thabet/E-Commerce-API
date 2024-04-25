@@ -1,8 +1,15 @@
 const Category = require('../../database/models/category-model');
+const AppError = require('../../utils/appError');
 
 exports.getCategory = async (categoryId) => {
   try {
-    return await Category.findById(categoryId);
+    const category = await Category.findById(categoryId);
+
+    console.log(category);
+
+    if (!category) throw new AppError('no category found by this id.', 404);
+
+    return category;
   } catch (err) {
     throw err;
   }
@@ -10,6 +17,8 @@ exports.getCategory = async (categoryId) => {
 
 exports.getAllCategories = async (filter, sort, page, size) => {
   try {
+    const query = {};
+
     const { ...otherFilters } = filter;
 
     Object.entries(otherFilters).forEach(([key, value]) => {

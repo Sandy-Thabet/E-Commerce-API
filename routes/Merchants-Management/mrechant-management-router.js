@@ -13,14 +13,6 @@ merchantManagementRouter.get(
   merchantManagementController.getAllMerchants
 );
 
-// approve merchant
-merchantManagementRouter.patch(
-  '/:id',
-  authorization.verifyTokenAdmin,
-  accessMiddleware('admin'),
-  merchantManagementController.approveMerchant
-);
-
 //get merchant
 merchantManagementRouter.get(
   '/:id',
@@ -29,13 +21,31 @@ merchantManagementRouter.get(
   merchantManagementController.getMerchant
 );
 
+// approve merchant
 merchantManagementRouter.patch(
   '/:id',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  merchantManagementController.approveMerchant
+);
+
+// block merchant
+merchantManagementRouter.patch(
+  '/:id/block',
   authorization.verifyTokenAdmin,
   accessMiddleware('admin'),
   merchantManagementController.blockMerchant
 );
 
+// unblock merchant
+merchantManagementRouter.patch(
+  '/:id/unblock',
+  authorization.verifyTokenAdmin,
+  accessMiddleware('admin'),
+  merchantManagementController.unblockMerchant
+);
+
+// delete merchant
 merchantManagementRouter.delete(
   '/:id',
   authorization.verifyTokenAdmin,

@@ -51,6 +51,26 @@ exports.blockUser = async (id) => {
   }
 };
 
+exports.unblockUser = async (id) => {
+  try {
+    const currentUser = await User.findById(id);
+
+    if (!currentUser || currentUser.status !== 'blocked') {
+      throw new AppError('no user found by this id.', 404);
+    }
+
+    const user = await User.findByIdAndUpdate(id, { status: 'active' }).select(
+      '-validationCode'
+    );
+    user.status = 'user';
+    user.validationCode = undefined;
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.deleteUser = async (id) => {
   try {
     const user = await User.findById(id);

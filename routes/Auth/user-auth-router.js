@@ -66,6 +66,7 @@ userAuthRouter.get(
   userAuthController.getMe
 );
 
+// update profile
 userAuthRouter.patch(
   '/update-me',
   authorization.verifyTokenUser,
@@ -73,6 +74,7 @@ userAuthRouter.patch(
   userAuthController.updateMe
 );
 
+// logout
 userAuthRouter.delete(
   '/logout',
   authorization.verifyTokenUser,
