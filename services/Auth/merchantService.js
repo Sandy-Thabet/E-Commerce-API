@@ -96,7 +96,9 @@ exports.validateCode = async (merchantID, code) => {
 
 exports.login = async (email, password) => {
   try {
-    const merchant = await Merchant.findOne({ email }).select('+password');
+    const merchant = await Merchant.findOne({ email })
+      .select('+password')
+      .select('-validationCode');
 
     if (merchant) {
       const pass = await bcrypt.compare(password, merchant.password);
@@ -170,8 +172,9 @@ exports.setNewPassword = async (email, code, password) => {
 
 exports.getMe = async (merchantId) => {
   try {
-    const merchant = await Merchant.findById(merchantId);
-
+    const merchant = await Merchant.findById(merchantId).select(
+      '-validationCode'
+    );
     return merchant;
   } catch (err) {
     throw err;

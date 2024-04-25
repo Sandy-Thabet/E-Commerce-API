@@ -2,21 +2,24 @@ const AppError = require('../../utils/appError');
 const Merchant = require('../../database/models/merchantModel');
 const MerchantNationalData = require('../../database/models/merchant-national-data-model');
 
-//! too much if conditions ?
 exports.approveMerchant = async (merchantId) => {
   try {
     const merchant = await Merchant.findById(merchantId);
 
-    if (!merchant) {
+    if (
+      !merchant ||
+      merchant.status === 'blocked' ||
+      merchant.status === 'inactive'
+    ) {
       throw new AppError('No merchant found by this id!', 404);
     }
 
     if (merchant.status === 'pending') {
-      throw new AppError('user is not activated yet!', 400);
+      throw new AppError('Merchant is not activated yet!', 400);
     }
 
     if (merchant.status === 'active') {
-      throw new AppError('user is already activated.', 400);
+      throw new AppError('Merchant is already activated.', 400);
     }
 
     let activatedMerchant;
@@ -50,7 +53,8 @@ exports.getAllMerchants = async (filter, page, size, sort) => {
     const merchants = await Merchant.find(query)
       .sort(sort)
       .limit(size)
-      .skip((page - 1) * size);
+      .skip((page - 1) * size)
+      .select('-validationCode');
 
     return { totalMerchants, merchants };
   } catch (err) {
@@ -60,7 +64,12 @@ exports.getAllMerchants = async (filter, page, size, sort) => {
 
 exports.getMerchant = async (id) => {
   try {
-    const merchant = await Merchant.findById(id);
+    const merchant = await Merchant.findById(id).select('-validationCode');
+
+    if (!merchant) {
+      throw new AppError('No merchant found by this id.', 404);
+    }
+
     const NationalData = await MerchantNationalData.find({ merchantId: id });
 
     merchant.validationCode = undefined;
@@ -70,37 +79,6 @@ exports.getMerchant = async (id) => {
     throw err;
   }
 };
-
-// //! return validationCode
-// //(we can't put in model {select:false } it makes a pug in another function)
-// exports.getPendingMerchants = async () => {
-//   try {
-//     // const merchant = await Merchant.find();
-//     // merchant.validationCode = undefined;
-
-//     return await Merchant.find({ status: 'pending' });
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// //! return validationCode
-// exports.getPendingApprovalMerchants = async () => {
-//   try {
-//     return await Merchant.find({ status: 'pendingAdminApproval' });
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// //! return validationCode
-// exports.getActiveMerchant = async () => {
-//   try {
-//     return await Merchant.find({ status: 'active' });
-//   } catch (err) {
-//     throw err;
-//   }
-// };
 
 exports.blockMerchant = async (id) => {
   try {
